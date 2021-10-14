@@ -1,0 +1,14 @@
+- data model
+	- node 
+		- elevation
+		- longitude
+		- latitude
+		- neighbors
+- how to populate data model
+	- openstreetmaps
+- routing algos
+	- a*
+	- dijkstras
+	- bfs/dfs
+- ui
+	- react
