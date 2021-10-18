@@ -1,10 +1,10 @@
-class Node {
+class Node:
     """
     Stores information about one point on the map including:
-        - latitude
-        - longitude
-        - neighbors (the points we can go from this point)
-        - elevation
+        - latitude: float
+        - longitude: float
+        - neighbors (the points we can go from this point): [Node]
+        - elevation: float
     """
     def __init__(self, latitude, longitude, neigbors=[], elevation=0):
         self.latitude = latitude
@@ -20,4 +20,3 @@ class Node {
     
     def get_elevation(self):
         return self.elevation
-}
