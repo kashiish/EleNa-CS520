@@ -6,17 +6,18 @@ class Node:
         - neighbors (the points we can go from this point): [Node]
         - elevation: float
     """
-    def __init__(self, latitude, longitude, neigbors=[], elevation=0):
+    def __init__(self, latitude, longitude, neighbors=[], elevation=0):
         self.latitude = latitude
         self.longitude = longitude
-        self.neigbors = neigbors
+        self.neighbors = neighbors
         self.elevation = elevation
     
     def get_coordinates(self):
         return (self.latitude, self.longitude)
     
     def get_neighbors(self):
-        return self.neigbors
+        return self.neighbors
     
     def get_elevation(self):
         return self.elevation
+
