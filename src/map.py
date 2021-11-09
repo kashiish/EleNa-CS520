@@ -6,7 +6,7 @@ import requests
 def get_map_data(place_query):
 	transport_methods = ["drive", "bike", "walk"]
 	for transport_method in transport_methods:
-		graph = osmnx.graph_from_place(place_query, network_type="drive")
+		graph = osmnx.graph_from_place(place_query, network_type=transport_method)
 		add_elevation_data(graph)
 		filename = "cached_maps/{}-{}.pkl".format(place_query["city"].lower(), transport_method)
 		pkl.dump(graph, open(filename, "wb"))
