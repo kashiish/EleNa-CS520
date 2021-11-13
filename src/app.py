@@ -32,12 +32,10 @@ class App:
 		start_latitude_longitude = osmnx.geocoder.geocode(self.start_address)
 		start_node_id = osmnx.distance.nearest_nodes(self.graph, start_latitude_longitude[1], start_latitude_longitude[0])
 		self.start = self.graph.nodes[start_node_id]
-		print(self.start)
 		
 		end_latitude_longitude = osmnx.geocoder.geocode(self.end_address)
 		end_node_id = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
 		self.end = self.graph.nodes[end_node_id]
-		print(self.end)
 
 def main():
 	app = App()
