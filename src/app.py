@@ -22,11 +22,11 @@ class App:
 		self.end_latitude = float(input("Enter the latitude of your end location: "))
 		self.end_longitude = float(input("Enter the longitude of your end location: "))
 		self.elevation_gain_mode = input("Type 'maximize' if you want to maximize elevation gain, or 'minimize' if you want to minimize elevation gain (no quotes), or press enter to skip & to get the shortest route: ")
-		self.x = input("Enter how much you're able to travel additional to the shortest route: ")
+		self.x = input("Enter what percentage of shortest path you're able to additionally travel: ")
 		
 		self.transportation_mode = input("Enter one of the following options for your preferred mode of transportation: drive, walk, bike: ")
 		
-		while self.transportation_mode not in self.TRANSPORTATION_MODES:
+		while self.transportation_mode.lower() not in self.TRANSPORTATION_MODES:
 			self.transportation_mode = input("Please enter a valid option between drive, walk, bike: ")
 
 	def set_graph(self):
