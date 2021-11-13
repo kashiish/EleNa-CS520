@@ -1,5 +1,6 @@
 import sys
-import osmnx as osmnx
+import osmnx
+import pickle as pkl
 
 class App:
 	def __init__(self):
@@ -31,24 +32,22 @@ class App:
 
 	def get_graph(self):
 		if self.transportation_mode == "drive":
-			with open("boulder-drive.pkl", 'rb') as file:
+			with open("cached_maps/boulder-drive.pkl", 'rb') as file:
 				self.graph = pkl.load(file)
-				print(list(self.graph.nodes(data=True)))
 
 		if self.transportation_mode == "walk":
-			with open("boulder-walk.pkl", 'rb') as file:
+			with open("cached_maps/boulder-walk.pkl", 'rb') as file:
 				self.graph = pkl.load(file)
-				print(list(self.graph.nodes(data=True)))
 
 		if self.transportation_mode == "bike":
-			with open("boulder-bike.pkl", 'rb') as file:
+			with open("cached_maps/boulder-bike.pkl", 'rb') as file:
 				self.graph = pkl.load(file)
-				print(list(self.graph.nodes(data=True)))
 		
-		self.start = osmnx.get_nearest_node(self.graph, self.start_latitude, self.start_longitude)
-		print(self.start)
-		self.end = osmnx.get_nearest_node(self.graph, self.end_latitude, self.end_longitude)
-		print(self.end)
+		start_node_id = osmnx.distance.nearest_nodes(self.graph, self.start_longitude, self.start_latitude)
+		self.start = self.graph.nodes[start_node_id]
+		
+		end_node_id = osmnx.distance.nearest_nodes(self.graph, self.end_longitude, self.end_latitude)
+		self.end = self.graph.nodes[end_node_id]
 
 def main():
 	app = App()
