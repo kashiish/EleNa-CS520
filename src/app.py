@@ -16,7 +16,7 @@ class App:
 		self.start = None
 		self.end = None
 
-	def get_user_inputs(self):
+	def set_user_inputs(self):
 		self.start_latitude = float(input("Enter the latitude of your start location: "))
 		self.start_longitude = float(input("Enter the longitude of your start location: "))
 		self.end_latitude = float(input("Enter the latitude of your end location: "))
@@ -30,7 +30,7 @@ class App:
 			print("Please enter a valid option between drive, walk, bike next time: ")
 			sys.exit()
 
-	def get_graph(self):
+	def set_graph(self):
 		if self.transportation_mode == "drive":
 			with open("cached_maps/boulder-drive.pkl", 'rb') as file:
 				self.graph = pkl.load(file)
@@ -43,6 +43,7 @@ class App:
 			with open("cached_maps/boulder-bike.pkl", 'rb') as file:
 				self.graph = pkl.load(file)
 		
+	def set_start_end_nodes(self):
 		start_node_id = osmnx.distance.nearest_nodes(self.graph, self.start_longitude, self.start_latitude)
 		self.start = self.graph.nodes[start_node_id]
 		
@@ -51,8 +52,9 @@ class App:
 
 def main():
 	app = App()
-	app.get_user_inputs()
-	app.get_graph()
+	app.set_user_inputs()
+	app.set_graph()
+	app.set_start_end_nodes()
 
 if __name__ == '__main__':
 	main()
