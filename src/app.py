@@ -4,10 +4,10 @@ import pickle as pkl
 
 class App:
 	def __init__(self):
-		self.start_latitude = None
-		self.start_longitude = None
-		self.end_latitude = None
-		self.end_longitude = None
+		self.start_latitude = 0
+		self.start_longitude = 0
+		self.end_latitude = 0
+		self.end_longitude = 0
 		self.elevation_gain_mode = None
 		self.x = None
 		self.transportation_mode = None
