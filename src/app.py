@@ -1,4 +1,5 @@
 import osmnx
+import routing_dijkstra as rd
 import pickle as pkl
 
 class App:
@@ -30,18 +31,20 @@ class App:
 		
 	def set_start_end_nodes(self):
 		start_latitude_longitude = osmnx.geocoder.geocode(self.start_address)
-		start_node_id = osmnx.distance.nearest_nodes(self.graph, start_latitude_longitude[1], start_latitude_longitude[0])
-		self.start = self.graph.nodes[start_node_id]
+		self.start = osmnx.distance.nearest_nodes(self.graph, start_latitude_longitude[1], start_latitude_longitude[0])
 		
 		end_latitude_longitude = osmnx.geocoder.geocode(self.end_address)
-		end_node_id = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
-		self.end = self.graph.nodes[end_node_id]
+		self.end = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
+
+	def find_route(self):
+		rd.dijkstra(self.graph, self.start, self.end)
 
 def main():
 	app = App()
 	app.set_user_inputs()
 	app.set_graph()
 	app.set_start_end_nodes()
+	app.find_route()
 
 if __name__ == '__main__':
 	main()
