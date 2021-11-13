@@ -1,13 +1,10 @@
-import sys
 import osmnx
 import pickle as pkl
 
 class App:
 	def __init__(self):
-		self.start_latitude = 0
-		self.start_longitude = 0
-		self.end_latitude = 0
-		self.end_longitude = 0
+		self.start_address = ""
+		self.end_address = ""
 		self.elevation_gain_mode = None
 		self.x = None
 		self.transportation_mode = None
@@ -17,10 +14,8 @@ class App:
 		self.end = None
 
 	def set_user_inputs(self):
-		self.start_latitude = float(input("Enter the latitude of your start location: "))
-		self.start_longitude = float(input("Enter the longitude of your start location: "))
-		self.end_latitude = float(input("Enter the latitude of your end location: "))
-		self.end_longitude = float(input("Enter the longitude of your end location: "))
+		self.start_address = input("Enter the address of your start location: ")
+		self.end_address = input("Enter the address of your end location: ")
 		self.elevation_gain_mode = input("Type 'maximize' if you want to maximize elevation gain, or 'minimize' if you want to minimize elevation gain (no quotes), or press enter to skip & to get the shortest route: ")
 		self.x = input("Enter what percentage of shortest path you're able to additionally travel: ")
 		
@@ -34,11 +29,15 @@ class App:
 				self.graph = pkl.load(file)
 		
 	def set_start_end_nodes(self):
-		start_node_id = osmnx.distance.nearest_nodes(self.graph, self.start_longitude, self.start_latitude)
+		start_latitude_longitude = osmnx.geocoder.geocode(self.start_address)
+		start_node_id = osmnx.distance.nearest_nodes(self.graph, start_latitude_longitude[1], start_latitude_longitude[0])
 		self.start = self.graph.nodes[start_node_id]
+		print(self.start)
 		
-		end_node_id = osmnx.distance.nearest_nodes(self.graph, self.end_longitude, self.end_latitude)
+		end_latitude_longitude = osmnx.geocoder.geocode(self.end_address)
+		end_node_id = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
 		self.end = self.graph.nodes[end_node_id]
+		print(self.end)
 
 def main():
 	app = App()
