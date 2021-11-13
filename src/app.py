@@ -26,7 +26,7 @@ class App:
 		
 		self.transportation_mode = input("Enter one of the following options for your preferred mode of transportation: drive, walk, bike: ")
 		
-		while self.transportation_mode.lower() not in self.TRANSPORTATION_MODES:
+		while self.transportation_mode not in self.TRANSPORTATION_MODES:
 			self.transportation_mode = input("Please enter a valid option between drive, walk, bike: ")
 
 	def set_graph(self):
