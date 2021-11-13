@@ -30,16 +30,7 @@ class App:
 			self.transportation_mode = input("Please enter a valid option between drive, walk, bike: ")
 
 	def set_graph(self):
-		if self.transportation_mode == "drive":
-			with open("cached_maps/boulder-drive.pkl", 'rb') as file:
-				self.graph = pkl.load(file)
-
-		if self.transportation_mode == "walk":
-			with open("cached_maps/boulder-walk.pkl", 'rb') as file:
-				self.graph = pkl.load(file)
-
-		if self.transportation_mode == "bike":
-			with open("cached_maps/boulder-bike.pkl", 'rb') as file:
+		with open("cached_maps/boulder-{}.pkl".format(self.transportation_mode), 'rb') as file:
 				self.graph = pkl.load(file)
 		
 	def set_start_end_nodes(self):
