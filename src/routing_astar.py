@@ -31,7 +31,7 @@ def a_star(graph, start, end, x, elevation_setting=None):
 	elevations = {}
 	previous_nodes = {}
 
-	#priority = elevation
+	#priority = distance + elevation diff between nodes
 	queue = []
 
 	heapq.heappush(queue, (0, 0, start))
@@ -66,7 +66,7 @@ def a_star(graph, start, end, x, elevation_setting=None):
 				elif elevation_setting == "minimize":
 					heapq.heappush(queue, (f_distances[next_node], elevations[next_node], next_node))
 				else:
-					heapq.heappush(queue, (distance, next_node))
+					heapq.heappush(queue, (g_distances[next_node], next_node))
 
 				previous_nodes[next_node] = current_node
 	return get_path_from_previous_nodes(previous_nodes, start, end)
