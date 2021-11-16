@@ -55,7 +55,7 @@ def dijkstra(graph, start, end, x, elevation_setting=None):
 				elif elevation_setting == "minimize":
 					heapq.heappush(queue, (elevations[next_node], next_node))
 				else:
-					heapq.heappush(queue, (distance, next_node))
+					heapq.heappush(queue, (total_new_distance, next_node))
 				previous_nodes[next_node] = current_node
 	return get_path_from_previous_nodes(previous_nodes, start, end)
 
