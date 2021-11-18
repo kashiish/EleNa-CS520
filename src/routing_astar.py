@@ -1,12 +1,12 @@
 import osmnx
 import heapq
 
-def find_max_length(graph, start, end):
+def find_max_length(graph, x, start, end):
 	shortest_path = osmnx.distance.shortest_path(graph, start, end)
 	if shortest_path is None:
 		return None
 
-	max_length = (1 + (x/100)) + get_total_path_length(shortest_path, graph)
+	max_length = (1 + (float(x)/100)) + get_total_path_length(shortest_path, graph)
 	return max_length
 
 def get_elevation_diff(graph, start, end):
@@ -40,7 +40,7 @@ def a_star(graph, start, end, x, elevation_setting=None):
 	elevations[start] = 0
 	previous_nodes[start] = None
 
-	max_length = find_max_length(graph, start, end)
+	max_length = find_max_length(graph, x, start, end)
 
 	#no visited set in case we need to backtrack
 
@@ -57,7 +57,7 @@ def a_star(graph, start, end, x, elevation_setting=None):
 			temp_g_total_old_distance = float("inf") if next_node not in g_distances else g_distances[next_node]
 			if temp_g_total_new_distance <= max_length and temp_g_total_new_distance < temp_g_total_old_distance:
 				elevations[next_node] = elevation_to_next_node + elevations[current_node]
-				g_distances[next_node] = total_new_distance
+				g_distances[next_node] = temp_g_total_new_distance
 				heuristic = get_elevation_diff(graph, next_node, end)
 				f_distances[next_node] = temp_g_total_new_distance + heuristic
 				
