@@ -2,7 +2,6 @@ import random
 import networkx as nx
 import pickle as pkl
 import math
-import matplotlib.pyplot as plt
 
 # The following code has been inspired from the networkx documentation: https://networkx.org/documentation/stable/auto_examples/drawing/plot_directed.html
 def make_small_graph():
