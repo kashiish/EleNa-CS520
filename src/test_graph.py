@@ -15,7 +15,7 @@ def make_small_graph():
     incoming = {}
     outgoing = {}
     graph.nodes[node]["x"] = positions[node][0]
-    graph.nodes[node]["y"] = positions[node][1] * 100 # TODO: remove this 100?
+    graph.nodes[node]["y"] = positions[node][1]
     graph.nodes[node]["elevation"] = random.randint(20, 200)
     for path in graph.in_edges(node):
       if path not in incoming:
