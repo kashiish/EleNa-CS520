@@ -40,7 +40,7 @@ def make_small_graph():
   for path in duplicates:
     graph.remove_edge(path[0], path[1])
 
-  filename = "../cached_maps/test_small_graph.pkl"
+  filename = "../cached_maps/test-small-graph.pkl"
   pkl.dump(graph, open(filename, "wb"))
 
 def make_medium_graph():
@@ -53,8 +53,8 @@ def make_medium_graph():
   for node in graph.nodes:
     incoming = {}
     outgoing = {}
-    graph.nodes[node]["x"] = positions[node][0] * 100 # TODO: remove this 100?
-    graph.nodes[node]["y"] = positions[node][1] * 100 # TODO: remove this 100?
+    graph.nodes[node]["x"] = positions[node][0]
+    graph.nodes[node]["y"] = positions[node][1]
     graph.nodes[node]["elevation"] = random.randint(20, 200)
     for path in graph.in_edges(node):
       if path not in incoming:
@@ -79,7 +79,7 @@ def make_medium_graph():
   for path in duplicates:
     graph.remove_edge(path[0], path[1])
 
-  filename = "../cached_maps/test_medium_graph.pkl"
+  filename = "../cached_maps/test-medium-graph.pkl"
   pkl.dump(graph, open(filename, "wb"))
 
 if __name__ == "__main__":
