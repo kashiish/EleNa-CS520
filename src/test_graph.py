@@ -40,7 +40,7 @@ def make_small_graph():
   for path in duplicates:
     graph.remove_edge(path[0], path[1])
 
-  filename = "../cached_maps/test-small-graph.pkl"
+  filename = "cached_maps/test-small-graph.pkl"
   pkl.dump(graph, open(filename, "wb"))
 
 def make_medium_graph():
@@ -79,7 +79,7 @@ def make_medium_graph():
   for path in duplicates:
     graph.remove_edge(path[0], path[1])
 
-  filename = "../cached_maps/test-medium-graph.pkl"
+  filename = "cached_maps/test-medium-graph.pkl"
   pkl.dump(graph, open(filename, "wb"))
 
 if __name__ == "__main__":
