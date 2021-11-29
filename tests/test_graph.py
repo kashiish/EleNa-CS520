@@ -99,4 +99,4 @@ def remove_duplicate_edges_for_node(graph, node):
 if __name__ == "__main__":
 		# make_small_uniform_graph()
 		# make_small_nonuniform_graph()
-		make_medium_graph()
+		# make_medium_graph()

@@ -24,6 +24,7 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 	#priority = elevation
 	queue = [] 
 
+	#queue element stores (total elevation from start node to current node, total distance from start to current node, current node, previous node)
 	heapq.heappush(queue, (0, 0, start, None))
 	distances[start] = 0
 	elevations[start] = 0
@@ -44,6 +45,7 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 			distances[current_node] = current[1]
 			previous_nodes[current_node] = current[3]
 
+		#we've found a complete path, stop searching this path
 		if current_node == end:
 			continue
 
@@ -51,6 +53,7 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 
 		for edge in graph.edges(current_node, data=True):
 			next_node = edge[1]
+			#avoid self loops
 			if next_node == current_node:
 				continue
 			distance_to_next_node = graph[current_node][next_node][0]["length"]
@@ -59,6 +62,7 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 			elevation_to_next_node = get_elevation_diff(graph, current_node, next_node) 
 			total_elevation = elevations[current_node] + elevation_to_next_node
 
+			#if the total distance is greater than max length, this is an invalid path
 			if total_new_distance <= max_length and next_node not in visited:
 				if elevation_setting == "maximize":
 					heapq.heappush(queue, (-total_elevation, total_new_distance, next_node, current_node))
@@ -83,13 +87,14 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 	return: list - a route from start to end or None if a route does not exist
 	"""
 
-	g_elevations = {}
-	f_elevations = {}
-	distances = {}
+	g_elevations = {} #for each node, stores elevation from current node to next node
+	f_elevations = {} #for each node, stores elevation from current node to next node + elevation from current node to end node
+	distances = {} #
 	previous_nodes = {}
 
 	queue = []
 
+	#queue element stores (f_elevation, g_elevation, total distance from start to current node, current node, previous node)
 	heapq.heappush(queue, (get_elevation_diff(graph, start, end), 0, 0, start, None))
 
 	visited = set()
@@ -108,6 +113,7 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 			distances[current_node] = current[2]
 			previous_nodes[current_node] = current[4]
 
+		#we've found a complete path, stop searching this path
 		if current_node == end:
 			continue
 
@@ -115,6 +121,11 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 	
 		for edge in graph.edges(current_node, data=True):
 			next_node = edge[1]
+
+			#avoid self loops
+			if next_node == current_node:
+				continue
+
 			g_elevation_to_next_node = get_elevation_diff(graph, current_node, next_node)
 			g_total_new_elevation = g_elevations[current_node] + g_elevation_to_next_node
 
@@ -123,6 +134,7 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 
 			heuristic = get_elevation_diff(graph, next_node, end)
 
+			#if the total distance is greater than max length, this is an invalid path
 			if total_new_distance <= max_length and next_node not in visited:
 				if elevation_setting == "maximize":
 					heapq.heappush(queue, (-g_total_new_elevation - heuristic, g_total_new_elevation, total_new_distance, next_node, current_node))
