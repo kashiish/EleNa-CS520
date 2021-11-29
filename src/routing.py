@@ -1,7 +1,7 @@
 import osmnx
 import heapq
 
-def dijkstra(graph, start, end, x, elevation_setting=None):
+def dijkstra(graph, start, end, x=0, elevation_setting=None):
 	"""
 	Runs Dijkstra shortest path algorithm to find a route that either maximizes or minimizes elevation gain
 	from start to end location within x% of the shortest path. 
@@ -22,31 +22,36 @@ def dijkstra(graph, start, end, x, elevation_setting=None):
 	previous_nodes = {}
 
 	#priority = elevation
-	queue = []
+	queue = [] 
 
 	heapq.heappush(queue, (0, start))
 	distances[start] = 0
 	elevations[start] = 0
 	previous_nodes[start] = None
 
-	#no visited set in case we need to backtrack
-
-	shortest_path = find_max_length(graph, x, start, end)
-
-	max_length = (1 + (x/100)) + get_total_path_length(shortest_path, graph)
+	visited = set()
+	max_length = find_max_length(graph, x, start, end)
+	if max_length == -1:
+		return None
 
 	while queue:
 		current_node = heapq.heappop(queue)[1]
+		visited.add(current_node)
 		if current_node == end and distances[current_node] <= max_length:
 			break
 		for edge in graph.edges(current_node, data=True):
 			next_node = edge[1]
+			if next_node == current_node:
+				continue
 			distance_to_next_node = graph[current_node][next_node][0]["length"]
-			elevation_to_next_node = get_elevation_diff(graph, current_node, next_node)
+			elevation_to_next_node = get_elevation_diff(graph, current_node, next_node) 
 			total_new_distance = distances[current_node] + distance_to_next_node
 			total_old_distance = float("inf") if next_node not in distances else distances[next_node]
-			if total_new_distance <= max_length and total_new_distance < total_old_distance:
-				elevations[next_node] = elevation_to_next_node + elevations[current_node]
+		
+			if total_new_distance <= max_length and next_node not in visited:
+				elevations[next_node] = elevations[current_node]
+				if elevation_to_next_node > 0:
+					elevations[next_node] += elevation_to_next_node
 				distances[next_node] = total_new_distance
 				if elevation_setting == "maximize":
 					heapq.heappush(queue, (-elevations[next_node], next_node))
@@ -87,6 +92,9 @@ def a_star(graph, start, end, x, elevation_setting=None):
 
 	max_length = find_max_length(graph, x, start, end)
 
+	if max_length == -1:
+		return None
+
 	#no visited set in case we need to backtrack
 
 	while queue:
@@ -101,7 +109,9 @@ def a_star(graph, start, end, x, elevation_setting=None):
 			temp_g_total_new_distance = g_distances[current_node] + temp_g_distance_to_next_node
 			temp_g_total_old_distance = float("inf") if next_node not in g_distances else g_distances[next_node]
 			if temp_g_total_new_distance <= max_length and temp_g_total_new_distance < temp_g_total_old_distance:
-				elevations[next_node] = elevation_to_next_node + elevations[current_node]
+				elevations[next_node] = elevations[current_node]
+				if elevation_to_next_node > 0:
+					elevations[next_node] += elevation_to_next_node
 				g_distances[next_node] = temp_g_total_new_distance
 				heuristic = get_elevation_diff(graph, next_node, end)
 				f_distances[next_node] = temp_g_total_new_distance + heuristic
@@ -116,7 +126,7 @@ def a_star(graph, start, end, x, elevation_setting=None):
 				previous_nodes[next_node] = current_node
 	return get_path_from_previous_nodes(previous_nodes, start, end)
 
-def bfs(graph, start, end, x, elevation_setting=None):
+def bfs(graph, start, end):
     """
 	Runs BFS shortest path algorithm to find a shortest path from start to end location.
 
@@ -124,8 +134,6 @@ def bfs(graph, start, end, x, elevation_setting=None):
 		graph: networkx multidigraph - the area we are searching in
 		start: int - the starting location of the route
 		end: int - the end location of the route
-		x: int - the percentage we can deviate from the shortest path length
-		elevation_setting: string - either "maximize", "minimize", or None
 
 	return: list - a route from start to end or None if a route does not exist
 	"""
@@ -213,7 +221,7 @@ def find_max_length(graph, x, start, end):
 	if shortest_path is None:
 		return -1
 
-	max_length = (1 + (float(x)/100)) + get_total_path_length(shortest_path, graph)
+	max_length = (1 + (float(x)/100)) * get_total_path_length(shortest_path, graph)
 	return max_length
 
 def get_elevation_diff(graph, node1, node2):
@@ -242,7 +250,7 @@ def get_path_elevation(nodes, graph):
 	elevation = 0
 
 	for i in range(len(nodes)-1):
-		elevation += graph.nodes[nodes[i+1]]["elevation"] - graph.nodes[nodes[i]]["elevation"]
+		elevation += max(0, graph.nodes[nodes[i+1]]["elevation"] - graph.nodes[nodes[i]]["elevation"])
 
 	return elevation
 
@@ -282,6 +290,7 @@ def get_path_from_previous_nodes(previous_nodes, start, end):
 		path.append(current_node)
 	path.reverse()
 	return path
+
 
 
 
