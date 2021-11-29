@@ -1,5 +1,6 @@
 import osmnx
 import heapq
+import pickle as pkl
 
 def dijkstra(graph, start, end, x=0, elevation_setting=None):
 	"""
@@ -24,42 +25,51 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 	#priority = elevation
 	queue = [] 
 
-	heapq.heappush(queue, (0, start))
+	heapq.heappush(queue, (0, 0, start, None))
 	distances[start] = 0
 	elevations[start] = 0
 	previous_nodes[start] = None
 
 	visited = set()
+
 	max_length = find_max_length(graph, x, start, end)
 	if max_length == -1:
 		return None
 
 	while queue:
-		current_node = heapq.heappop(queue)[1]
+		current = heapq.heappop(queue)
+		current_node = current[2]
+
+		if current_node not in elevations or (elevation_setting == "maximize" and elevations[current_node] < -current[0]) or (elevation_setting == "minimize" and elevations[current_node] > current[0]):
+			elevations[current_node] = current[0] if elevation_setting == "minimize" else -current[0]
+			distances[current_node] = current[1]
+			previous_nodes[current_node] = current[3]
+
+		if current_node == end:
+			continue
+
 		visited.add(current_node)
-		if current_node == end and distances[current_node] <= max_length:
-			break
+
 		for edge in graph.edges(current_node, data=True):
 			next_node = edge[1]
 			if next_node == current_node:
 				continue
 			distance_to_next_node = graph[current_node][next_node][0]["length"]
+			total_new_distance = distances[current_node] + distance_to_next_node	
+
 			elevation_to_next_node = get_elevation_diff(graph, current_node, next_node) 
-			total_new_distance = distances[current_node] + distance_to_next_node
-			total_old_distance = float("inf") if next_node not in distances else distances[next_node]
-		
+			total_elevation = elevations[current_node]
+			if elevation_to_next_node > 0:
+				total_elevation += elevation_to_next_node
+
 			if total_new_distance <= max_length and next_node not in visited:
-				elevations[next_node] = elevations[current_node]
-				if elevation_to_next_node > 0:
-					elevations[next_node] += elevation_to_next_node
-				distances[next_node] = total_new_distance
 				if elevation_setting == "maximize":
-					heapq.heappush(queue, (-elevations[next_node], next_node))
+					heapq.heappush(queue, (-total_elevation, total_new_distance, next_node, current_node))
 				elif elevation_setting == "minimize":
-					heapq.heappush(queue, (elevations[next_node], next_node))
+					heapq.heappush(queue, (total_elevation, total_new_distance, next_node, current_node))
 				else:
-					heapq.heappush(queue, (total_new_distance, next_node))
-				previous_nodes[next_node] = current_node
+					heapq.heappush(queue, (0, total_new_distance, next_node, current_node))
+
 	return get_path_from_previous_nodes(previous_nodes, start, end)
 
 def a_star(graph, start, end, x, elevation_setting=None):
@@ -90,15 +100,14 @@ def a_star(graph, start, end, x, elevation_setting=None):
 	elevations[start] = 0
 	previous_nodes[start] = None
 
+	visited = set()
 	max_length = find_max_length(graph, x, start, end)
-
 	if max_length == -1:
 		return None
 
-	#no visited set in case we need to backtrack
-
 	while queue:
 		current_node = heapq.heappop(queue)[2]
+		visited.add(current_node)
 		
 		if current_node == end and f_distances[current_node] <= max_length:
 				break
@@ -108,7 +117,7 @@ def a_star(graph, start, end, x, elevation_setting=None):
 			elevation_to_next_node = graph.nodes[next_node]["elevation"] - graph.nodes[current_node]["elevation"]
 			temp_g_total_new_distance = g_distances[current_node] + temp_g_distance_to_next_node
 			temp_g_total_old_distance = float("inf") if next_node not in g_distances else g_distances[next_node]
-			if temp_g_total_new_distance <= max_length and temp_g_total_new_distance < temp_g_total_old_distance:
+			if temp_g_total_new_distance <= max_length and next_node not in visited:
 				elevations[next_node] = elevations[current_node]
 				if elevation_to_next_node > 0:
 					elevations[next_node] += elevation_to_next_node
@@ -290,7 +299,3 @@ def get_path_from_previous_nodes(previous_nodes, start, end):
 		path.append(current_node)
 	path.reverse()
 	return path
-
-
-
-

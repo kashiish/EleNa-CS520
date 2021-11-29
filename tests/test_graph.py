@@ -10,16 +10,11 @@ def make_small_uniform_graph():
 	graph = nx.generators.directed.random_uniform_k_out_graph(5, 3, seed=5)
 	positions = nx.layout.spring_layout(graph, seed=15) 
 	marked = {}
-	print(list(graph.nodes(data=True)))
-	print(list(graph.edges(data=True)))
 	for node in graph.nodes:
 		graph.nodes[node]["x"] = positions[node][0] * 10
 		graph.nodes[node]["y"] = positions[node][1] * 10
 		graph.nodes[node]["elevation"] = random.randint(10, 50)
 		remove_duplicate_edges_for_node(graph, node)
-
-	print(list(graph.nodes(data=True)))
-	print(list(graph.edges(data=True)))
 
 	for path in graph.edges():
 		first_node = graph.nodes[path[0]]
@@ -38,16 +33,11 @@ def make_small_nonuniform_graph():
 	graph = nx.generators.directed.random_k_out_graph(5, 3, 0.3, self_loops=False, seed=5)
 	positions = nx.layout.spring_layout(graph, seed=15) 
 	marked = {}
-	print(list(graph.nodes(data=True)))
-	print(list(graph.edges(data=True)))
 	for node in graph.nodes:
 		graph.nodes[node]["x"] = positions[node][0] * 10
 		graph.nodes[node]["y"] = positions[node][1] * 10
 		graph.nodes[node]["elevation"] = random.randint(10, 50)
 		remove_duplicate_edges_for_node(graph, node)
-
-	print(list(graph.nodes(data=True)))
-	print(list(graph.edges(data=True)))
 
 	for path in graph.edges():
 		first_node = graph.nodes[path[0]]
@@ -63,7 +53,7 @@ def make_small_nonuniform_graph():
 
 def make_medium_graph():
 	random.seed(15)
-	graph = nx.generators.directed.random_uniform_k_out_graph(50, 10, seed=5)
+	graph = nx.generators.directed.random_uniform_k_out_graph(15, 5, seed=5)
 	positions = nx.layout.spring_layout(graph, seed=15) 
 	marked = {}
 
@@ -107,6 +97,6 @@ def remove_duplicate_edges_for_node(graph, node):
 
 
 if __name__ == "__main__":
-		make_small_uniform_graph()
-		make_small_nonuniform_graph()
+		# make_small_uniform_graph()
+		# make_small_nonuniform_graph()
 		make_medium_graph()
