@@ -47,6 +47,11 @@ class App:
 			return routing.bfs(self.graph, self.start, self.end)
 		elif self.routing_method  == "dfs":
 			return routing.dfs(self.graph, self.start, self.end)
+		else:
+			print("Invalid routing method selected.")
+			return None
+
+
 
 def main():
 	app = App()
