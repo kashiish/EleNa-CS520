@@ -57,9 +57,7 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 			total_new_distance = distances[current_node] + distance_to_next_node	
 
 			elevation_to_next_node = get_elevation_diff(graph, current_node, next_node) 
-			total_elevation = elevations[current_node]
-			if elevation_to_next_node > 0:
-				total_elevation += elevation_to_next_node
+			total_elevation = elevations[current_node] + elevation_to_next_node
 
 			if total_new_distance <= max_length and next_node not in visited:
 				if elevation_setting == "maximize":
@@ -71,7 +69,7 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 
 	return get_path_from_previous_nodes(previous_nodes, start, end)
 
-def a_star(graph, start, end, x, elevation_setting=None):
+def a_star(graph, start, end, x=0, elevation_setting=None):
 	"""
 	Runs A* shortest path algorithm to find a route that either maximizes or minimizes elevation gain
 	from start to end location within x% of the shortest path. 
@@ -84,54 +82,55 @@ def a_star(graph, start, end, x, elevation_setting=None):
 		elevation_setting: string - either "maximize", "minimize", or None
 	return: list - a route from start to end or None if a route does not exist
 	"""
-	heuristic = 0
-	g_distances = {}
-	f_distances = {}
-	elevations = {}
+
+	g_elevations = {}
+	f_elevations = {}
+	distances = {}
 	previous_nodes = {}
 
-	#priority = distance + elevation diff between nodes
 	queue = []
 
-	heapq.heappush(queue, (0, 0, start))
-	g_distances[start] = 0 # ordinary distance
-	f_distances[start] = 0 # addition of heuristic
-	elevations[start] = 0
-	previous_nodes[start] = None
+	heapq.heappush(queue, (get_elevation_diff(graph, start, end), 0, 0, start, None))
 
 	visited = set()
 	max_length = find_max_length(graph, x, start, end)
+	
 	if max_length == -1:
 		return None
 
 	while queue:
-		current_node = heapq.heappop(queue)[2]
+		current = heapq.heappop(queue)
+		current_node = current[3]
+
+		if current_node not in f_elevations or (elevation_setting == "maximize" and f_elevations[current_node] < -current[0]) or (elevation_setting == "minimize" and f_elevations[current_node] > current[0]):
+			f_elevations[current_node] = current[0] if elevation_setting == "minimize" else -current[0]
+			g_elevations[current_node] = current[1]
+			distances[current_node] = current[2]
+			previous_nodes[current_node] = current[4]
+
+		if current_node == end:
+			continue
+
 		visited.add(current_node)
-		
-		if current_node == end and f_distances[current_node] <= max_length:
-				break
+	
 		for edge in graph.edges(current_node, data=True):
 			next_node = edge[1]
-			temp_g_distance_to_next_node = graph[current_node][next_node][0]["length"]
-			elevation_to_next_node = graph.nodes[next_node]["elevation"] - graph.nodes[current_node]["elevation"]
-			temp_g_total_new_distance = g_distances[current_node] + temp_g_distance_to_next_node
-			temp_g_total_old_distance = float("inf") if next_node not in g_distances else g_distances[next_node]
-			if temp_g_total_new_distance <= max_length and next_node not in visited:
-				elevations[next_node] = elevations[current_node]
-				if elevation_to_next_node > 0:
-					elevations[next_node] += elevation_to_next_node
-				g_distances[next_node] = temp_g_total_new_distance
-				heuristic = get_elevation_diff(graph, next_node, end)
-				f_distances[next_node] = temp_g_total_new_distance + heuristic
-				
-				if elevation_setting == "maximize":
-					heapq.heappush(queue, (f_distances[next_node], -elevations[next_node], next_node))
-				elif elevation_setting == "minimize":
-					heapq.heappush(queue, (f_distances[next_node], elevations[next_node], next_node))
-				else:
-					heapq.heappush(queue, (g_distances[next_node], next_node))
+			g_elevation_to_next_node = get_elevation_diff(graph, current_node, next_node)
+			g_total_new_elevation = g_elevations[current_node] + g_elevation_to_next_node
 
-				previous_nodes[next_node] = current_node
+			distance_to_next_node = graph[current_node][next_node][0]["length"]
+			total_new_distance = distances[current_node] + distance_to_next_node
+
+			heuristic = get_elevation_diff(graph, next_node, end)
+
+			if total_new_distance <= max_length and next_node not in visited:
+				if elevation_setting == "maximize":
+					heapq.heappush(queue, (-g_total_new_elevation - heuristic, g_total_new_elevation, total_new_distance, next_node, current_node))
+				elif elevation_setting == "minimize":
+					heapq.heappush(queue, (g_total_new_elevation + heuristic, g_total_new_elevation, total_new_distance, next_node, current_node))
+				else:
+					heapq.heappush(queue, (0, 0, total_new_distance, next_node, current_node))
+
 	return get_path_from_previous_nodes(previous_nodes, start, end)
 
 def bfs(graph, start, end):
@@ -229,7 +228,6 @@ def find_max_length(graph, x, start, end):
 	if shortest_path is None:
 		return -1
 
-	print("shortest", get_total_path_length(shortest_path, graph))
 	max_length = (1 + (float(x)/100)) * get_total_path_length(shortest_path, graph)
 	return max_length
 
@@ -244,7 +242,7 @@ def get_elevation_diff(graph, node1, node2):
 
 	return: float
 	"""
-	return graph.nodes[node2]["elevation"] - graph.nodes[node1]["elevation"]
+	return max(0, graph.nodes[node2]["elevation"] - graph.nodes[node1]["elevation"])
 
 def get_path_elevation(nodes, graph):
 	"""
