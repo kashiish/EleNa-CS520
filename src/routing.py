@@ -1,6 +1,5 @@
 import osmnx
 import heapq
-import pickle as pkl
 
 def dijkstra(graph, start, end, x=0, elevation_setting=None):
 	"""
@@ -230,6 +229,7 @@ def find_max_length(graph, x, start, end):
 	if shortest_path is None:
 		return -1
 
+	print("shortest", get_total_path_length(shortest_path, graph))
 	max_length = (1 + (float(x)/100)) * get_total_path_length(shortest_path, graph)
 	return max_length
 

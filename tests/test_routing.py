@@ -30,12 +30,29 @@ class TestUtils:
 	def test_get_path_elevation(self, small_test_graph):
 		path = [1, 0, 4]
 		path_elevation = routing.get_path_elevation(path, small_test_graph)
-		assert path_elevation == 13
+		expected_path_elevation = 13
+		assert path_elevation == expected_path_elevation
 
 	def test_get_path_length(self, small_test_graph):
 		path = [1, 0, 4]
 		path_length = routing.get_total_path_length(path, small_test_graph)
-		assert path_length == 25
+		expected_path_length = 25
+		assert path_length == expected_path_length
+
+	def test_get_path_from_previous_nodes(self):
+		expected_path = [1, 0, 4]
+		previous_nodes = {1: None, 0: 1, 4: 0, 2: 0}
+		path = routing.get_path_from_previous_nodes(previous_nodes, 1, 4)
+		assert path == expected_path
+
+	def test_find_max_length(self, small_test_graph):
+		x = 50
+		start = 1
+		end = 4
+
+		max_length = routing.find_max_length(small_test_graph, x, start, end)
+		expected_max_length = 10.5
+		assert max_length == expected_max_length
 
 class TestDijkstra:
 	def test_small_min_elevation(self, small_test_graph):
