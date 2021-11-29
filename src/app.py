@@ -11,6 +11,7 @@ class App:
 		self.transportation_mode = None
 		self.graph = None
 		self.TRANSPORTATION_MODES = ["drive", "walk", "bike"]
+		self.ELEVATION_MODES = ["maximize", "minimize", ""]
 		self.start = None
 		self.end = None
 		self.routing_method = None
@@ -20,10 +21,22 @@ class App:
 		self.end_address = input("Enter the address of your end location: ")
 		self.routing_method = input("Enter the routing algorithm you would like to use (BFS, DFS, Dijkstra, A*): ").lower()
 		self.elevation_gain_mode = input("Type 'maximize' if you want to maximize elevation gain, or 'minimize' if you want to minimize elevation gain (no quotes), or press enter to skip & to get the shortest route: ")
-		self.x = input("Enter what percentage of shortest path you're able to additionally travel: ")
+		while self.elevation_gain_mode not in self.ELEVATION_MODES:
+			self.elevation_gain_mode = input("Please enter a valid option between maximize, minimize, or enter to skip and get shortest route: ")
+		
+		self.x = input("Enter what (x) percentage of shortest path you're able to additionally travel: ")
+
+		flag = True
+
+		while flag:
+			try:
+				x_as_float = float(self.x)
+				flag = False
+			except ValueError:
+				self.x = input("Please enter a valid float number for x percentage: ")
 		
 		self.transportation_mode = input("Enter one of the following options for your preferred mode of transportation: drive, walk, bike: ").lower()
-		
+
 		while self.transportation_mode not in self.TRANSPORTATION_MODES:
 			self.transportation_mode = input("Please enter a valid option between drive, walk, bike: ")
 
@@ -50,15 +63,13 @@ class App:
 		else:
 			print("Invalid routing method selected.")
 			return None
-
-
-
+    
 def main():
 	app = App()
 	app.set_user_inputs()
 	app.set_graph()
 	app.set_start_end_nodes()
-	app.find_route()
+  app.find_route()
 
 if __name__ == '__main__':
 	main()
