@@ -1,5 +1,5 @@
 import osmnx
-import routing_dijkstra as rd
+import routing
 import pickle as pkl
 
 class App:
@@ -13,10 +13,12 @@ class App:
 		self.TRANSPORTATION_MODES = ["drive", "walk", "bike"]
 		self.start = None
 		self.end = None
+		self.routing_method = None
 
 	def set_user_inputs(self):
 		self.start_address = input("Enter the address of your start location: ")
 		self.end_address = input("Enter the address of your end location: ")
+		self.routing_method = input("Enter the routing algorithm you would like to use (BFS, DFS, Dijkstra, A*): ").lower()
 		self.elevation_gain_mode = input("Type 'maximize' if you want to maximize elevation gain, or 'minimize' if you want to minimize elevation gain (no quotes), or press enter to skip & to get the shortest route: ")
 		self.x = input("Enter what percentage of shortest path you're able to additionally travel: ")
 		
@@ -26,7 +28,7 @@ class App:
 			self.transportation_mode = input("Please enter a valid option between drive, walk, bike: ")
 
 	def set_graph(self):
-		with open("cached_maps/boulder-{}.pkl".format(self.transportation_mode), 'rb') as file:
+		with open("cached_maps/boulder-{}.pkl".format(self.transportation_mode), "rb") as file:
 				self.graph = pkl.load(file)
 		
 	def set_start_end_nodes(self):
@@ -37,7 +39,14 @@ class App:
 		self.end = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
 
 	def find_route(self):
-		rd.dijkstra(self.graph, self.start, self.end)
+		if self.routing_method == "dijkstra":
+			return routing.dijkstra(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method == "a*":
+			return routing.a_star(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method == "bfs":
+			return routing.bfs(self.graph, self.start, self.end)
+		elif self.routing_method  == "dfs":
+			return routing.dfs(self.graph, self.start, self.end)
 
 def main():
 	app = App()
