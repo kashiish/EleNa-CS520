@@ -69,7 +69,7 @@ def main():
 	app.set_user_inputs()
 	app.set_graph()
 	app.set_start_end_nodes()
-  app.find_route()
+	app.find_route()
 
 if __name__ == '__main__':
 	main()
