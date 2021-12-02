@@ -96,7 +96,7 @@ def remove_duplicate_edges_for_node(graph, node):
 		graph.remove_edge(path[0], path[1])
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 		# make_small_uniform_graph()
 		# make_small_nonuniform_graph()
 		# make_medium_graph()

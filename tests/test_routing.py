@@ -285,6 +285,101 @@ class TestAStar:
 		assert shortest_path == None
 		assert a_star_path == None
 
+# class TestBFS:
+# 	def test_small_graph(self, small_test_graph):
+# 		start_node = 1
+# 		end_node = 4
+
+# 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+# 		bfs_path = routing.bfs(small_test_graph, start_node, end_node)
+
+# 		print("shortest path", shortest_path)
+# 		print("bfs path", bfs_path)
+
+# 		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+# 		bfs_length = routing.get_total_path_length(bfs_path, small_test_graph)
+
+# 		print("shortest length", shortest_length)
+# 		print("bfs length", bfs_length)
+
+# 		assert shortest_length == bfs_length
+
+# 	def test_medium_graph(self, medium_test_graph):
+# 		start_node = 0
+# 		end_node = 2
+
+# 		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+# 		bfs_path = routing.bfs(medium_test_graph, start_node, end_node)
+
+# 		print("shortest path", shortest_path)
+# 		print("bfs path", bfs_path)
+
+# 		shortest_length = routing.get_total_path_length(shortest_path, medium_test_graph)
+# 		bfs_length = routing.get_total_path_length(bfs_path, medium_test_graph)
+
+# 		print("shortest length", shortest_length)
+# 		print("bfs length", bfs_length)
+
+# 		assert shortest_length == bfs_length
+
+# 	def test_small_no_path(self, small_test_nonuniform_graph):
+# 		start_node = 1
+# 		end_node = 2
+
+# 		shortest_path = osmnx.distance.shortest_path(small_test_nonuniform_graph, start_node, end_node)
+# 		bfs_path = routing.bfs(small_test_nonuniform_graph, start_node, end_node)
+		
+# 		assert shortest_path == None
+# 		assert bfs_path == None
+
+# class TestDFS:
+# 	def test_small_graph(self, small_test_graph):
+# 		start_node = 1
+# 		end_node = 4
+
+# 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+# 		dfs_path = routing.dfs(small_test_graph, start_node, end_node)
+
+# 		print("shortest path", shortest_path)
+# 		print("dfs path", dfs_path)
+
+# 		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+# 		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+# 		print("shortest length", shortest_length)
+# 		print("dfs length", dfs_length)
+
+# 		assert shortest_length == dfs_length
+
+# 	def test_medium_graph(self, medium_test_graph):
+# 		start_node = 0
+# 		end_node = 2
+
+# 		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+# 		dfs_path = routing.dfs(medium_test_graph, start_node, end_node)
+
+# 		print("shortest path", shortest_path)
+# 		print("dfs path", dfs_path)
+
+# 		shortest_length = routing.get_total_path_length(shortest_path, medium_test_graph)
+# 		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+
+# 		print("shortest length", shortest_length)
+# 		print("dfs length", dfs_length)
+
+# 		assert shortest_length == dfs_length
+
+# 	def test_small_no_path(self, small_test_nonuniform_graph):
+# 		start_node = 1
+# 		end_node = 2
+		
+# 		shortest_path = osmnx.distance.shortest_path(small_test_nonuniform_graph, start_node, end_node)
+# 		dfs_path = routing.dfs(small_test_nonuniform_graph, start_node, end_node)
+		
+# 		assert shortest_path == None
+# 		assert dfs_path == None
+	
+
 
 def show_graph(graph_name):
 	with open("cached_maps/{}".format(graph_name), 'rb') as file:
