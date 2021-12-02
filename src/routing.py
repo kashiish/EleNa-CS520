@@ -145,84 +145,86 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 
 	return get_path_from_previous_nodes(previous_nodes, start, end)
 
-# def bfs(graph, start, end):
-#     """
-# 	Runs BFS shortest path algorithm to find a shortest path from start to end location.
+def bfs(graph, start, end):
+    """
+   **EXPERIMENTAL USE ONLY**
+	Runs BFS shortest path algorithm to find a shortest path from start to end location.
 
-# 	params:
-# 		graph: networkx multidigraph - the area we are searching in
-# 		start: int - the starting location of the route
-# 		end: int - the end location of the route
+	params:
+		graph: networkx multidigraph - the area we are searching in
+		start: int - the starting location of the route
+		end: int - the end location of the route
 
-# 	return: list - a route from start to end or None if a route does not exist
-# 	"""
-#     queue = []
-#     queue.append([start])
-#     visited = []
+	return: list - a route from start to end or None if a route does not exist
+	"""
+    queue = []
+    queue.append([start])
+    visited = []
 
-#     if start == end:
-#         return [end]
+    if start == end:
+        return [end]
 
-#     # keep on iterating until every path has been explored
-#     while queue:
-#         # pop first path
-#         currPath = queue.pop(0)
-#         # getting last node from current path
-#         lastNode = currPath[-1]
-#         if lastNode not in visited:
-#             # looking at all the neighbors 
-#             for edge in graph.edges(lastNode, data=True):
-#                 neighbor = edge[1]
-#                 newCurPath = list(currPath)
-#                 newCurPath.append(neighbor)
-#                 queue.append(newCurPath)
-#                 # mark node as visited 
-#                 visited.append(lastNode)
-#                 if neighbor == end:
-#                     return newCurPath
+    # keep on iterating until every path has been explored
+    while queue:
+        # pop first path
+        currPath = queue.pop(0)
+        # getting last node from current path
+        lastNode = currPath[-1]
+        if lastNode not in visited:
+            # looking at all the neighbors 
+            for edge in graph.edges(lastNode, data=True):
+                neighbor = edge[1]
+                newCurPath = list(currPath)
+                newCurPath.append(neighbor)
+                queue.append(newCurPath)
+                # mark node as visited 
+                visited.append(lastNode)
+                if neighbor == end:
+                    return newCurPath
     
-#     # if no paths found return None
-#     return None
+    # if no paths found return None
+    return None
 
-# def dfs(graph, start, end):
-#     """
-#         Runs DFS path algorithm from start to end location to find shortest path
+def dfs(graph, start, end):
+    """
+     **EXPERIMENTAL USE ONLY**
+        Runs DFS path algorithm from start to end location to find shortest path
 
-#         params:
-#             graph: networkx multidigraph - the area we are searching in
-# 		    start: int - the starting location of the route
-# 		    end: int - the end location of the route
+        params:
+            graph: networkx multidigraph - the area we are searching in
+		    start: int - the starting location of the route
+		    end: int - the end location of the route
 
-#         return: list - a route from start to end or None if a route does not exist
-#     """
+        return: list - a route from start to end or None if a route does not exist
+    """
         
-#     stack = []
-#     visited = set()
-#     previous_nodes = {}
+    stack = []
+    visited = set()
+    previous_nodes = {}
 
-#     stack.append(start)
-#     visited.add(start)
-#     previous_nodes[start] = None
+    stack.append(start)
+    visited.add(start)
+    previous_nodes[start] = None
 
-#     while (len(stack) > 0):
-#         current_node = stack.pop()
+    while (len(stack) > 0):
+        current_node = stack.pop()
 
-#         if current_node in visited:
-#         	continue
+        if current_node in visited:
+        	continue
 
-#         visited.add(next_node)
+        visited.add(next_node)
 
-#         for edge in graph.edges(current_node, data=True):
-#             next_node = edge[1]
+        for edge in graph.edges(current_node, data=True):
+            next_node = edge[1]
 
-#             if next_node not in visited:
-#                 stack.append((next_node))
-#                 previous_nodes[next_node] = current_node
+            if next_node not in visited:
+                stack.append((next_node))
+                previous_nodes[next_node] = current_node
 
-#                 if next_node == end:
-#                     return get_path_from_previous_nodes(previous_nodes, start, end)
+                if next_node == end:
+                    return get_path_from_previous_nodes(previous_nodes, start, end)
     
-#     return None
+    return None
 
 
 def find_max_length(graph, x, start, end):
