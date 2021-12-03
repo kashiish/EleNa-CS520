@@ -1,6 +1,8 @@
 import osmnx
 import routing
 import pickle as pkl
+from context import Context
+from routing_actions import RoutingDijkstra, RoutingAStar, RoutingBFS, RoutingDFS
 
 class App:
 	def __init__(self):
@@ -63,13 +65,31 @@ class App:
 		else:
 			print("Invalid routing method selected.")
 			return None
+
+	def strategy_find_route(self):
+		if self.routing_method == "dijkstra":
+			context = Context(RoutingDijkstra(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method == "a*":
+			context = Context(RoutingAStar(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method == "bfs":
+			context = Context(RoutingBFS(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method  == "dfs":
+			context = Context(RoutingDFS(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		else:
+			print("Invalid routing method selected.")
+			return None
     
 def main():
 	app = App()
 	app.set_user_inputs()
 	app.set_graph()
 	app.set_start_end_nodes()
-	app.find_route()
+	#app.find_route()
+	app.strategy_find_route()
 
 if __name__ == '__main__':
 	main()
