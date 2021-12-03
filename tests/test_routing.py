@@ -6,7 +6,7 @@ import osmnx
 
 import sys
 sys.path.insert(0, '.')
-from src import routing
+from src import routing_actions, routing, context
 
 @pytest.fixture(scope="session")
 def small_test_graph():
@@ -25,6 +25,11 @@ def medium_test_graph():
 	with open("cached_maps/test-medium-graph.pkl", "rb") as file:
 		graph = pkl.load(file)
 		return graph
+
+@pytest.fixture(scope="session")
+def dijkstra():
+	dijkstra_context = context.Context(routing_actions.RoutingDijkstra())
+	return dijkstra_context
 
 class TestUtils:
 	def test_get_path_elevation(self, small_test_graph):
@@ -55,7 +60,7 @@ class TestUtils:
 		assert max_length == expected_max_length
 
 class TestDijkstra:
-	def test_small_min_elevation(self, small_test_graph):
+	def test_small_min_elevation(self, dijkstra, small_test_graph):
 		start_node = 3
 		end_node = 4
 
@@ -64,7 +69,7 @@ class TestDijkstra:
 		elevation_setting = "minimize"
 
 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
-		dijkstra_path = routing.dijkstra(small_test_graph, start_node, end_node, x, elevation_setting)
+		dijkstra_path = dijkstra.execute_routing_mode(small_test_graph, start_node, end_node, x, elevation_setting)
 
 		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
 		dijkstra_path_elevation = routing.get_path_elevation(dijkstra_path, small_test_graph)

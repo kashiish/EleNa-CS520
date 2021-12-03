@@ -24,5 +24,5 @@ class Context:
         """
         Execute routing algorithm of chosen strategy.
         """
-        return self._routing_mode.routing_action(graph, start, end, x=0, elevation_setting=None)
+        return self._routing_mode.routing_action(graph, start, end, x, elevation_setting)
         
