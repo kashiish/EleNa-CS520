@@ -1,9 +1,9 @@
 import osmnx
 import routing
 import pickle as pkl
+import tkinter as tk
 import networkx as nx
 import matplotlib.pyplot as plt
-
 
 class App:
 	def __init__(self):
@@ -73,6 +73,39 @@ class App:
 			return None
 
 	def display_path(self, path):
+		root = tk.Tk()
+
+		canvas1 = tk.Canvas(root, width = 700, height = 600,  relief = 'raised')
+		canvas1.pack()
+
+		label_title = tk.Label(root, text='EleNa')
+		label_title.config(font=('helvetica', 14))
+		canvas1.create_window(350, 25, window=label_title)
+
+		label_path = tk.Label(root, text='Path output:')
+		label_path.config(font=('helvetica', 12))
+		canvas1.create_window(350, 60, window=label_path)
+		
+		textbox = tk.Text(root)
+		textbox.insert(tk.END, path)
+		canvas1.create_window(350, 270, window=textbox)
+		
+		label_totalElevation = tk.Label(root, text='Total Elevation:')
+		label_totalElevation.config(font=('helvetica', 10))
+		canvas1.create_window(300, 500, window=label_totalElevation)
+		
+		label_totalElevationValue = tk.Label(root, text=routing.get_path_elevation(path, self.graph))
+		label_totalElevationValue.config(font=('helvetica', 10))
+		canvas1.create_window(400, 500, window=label_totalElevationValue)
+		
+		label_totalDistance = tk.Label(root, text='Total Distance:')
+		label_totalDistance.config(font=('helvetica', 10))
+		canvas1.create_window(300, 530, window=label_totalDistance)
+		
+		label_totalDistanceValue = tk.Label(root, text=routing.get_total_path_length(path, self.graph))
+		label_totalDistanceValue.config(font=('helvetica', 10))
+		canvas1.create_window(400, 530, window=label_totalDistanceValue)
+
 		positions = {}
 
 		for node in list(self.graph.nodes(data=True)):
@@ -84,10 +117,14 @@ class App:
 			positions[int(node[0])] = xy
 
 		h = self.graph.subgraph(path)
-		nx.draw_networkx_nodes(h,pos=positions, node_color='b', node_size=5) #or even nx.draw(h,pos=pos,node_color='b') to get nodes and edges in one command
+
+		nx.draw_networkx_nodes(h,pos=positions, node_color='b', node_size=5)
 		nx.draw_networkx_edges(h,pos=positions)
+		
 		plt.axis('equal')
 		plt.show() 
+
+		root.mainloop()
 
 def main():
 	app = App()
