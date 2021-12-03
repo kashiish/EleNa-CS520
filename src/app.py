@@ -72,7 +72,7 @@ class App:
 			print("Invalid routing method selected.")
 			return None
 
-	def display_path(self, path):
+	def display_path(self, path, shortest_path):
 		root = tk.Tk()
 
 		canvas1 = tk.Canvas(root, width = 700, height = 600,  relief = 'raised')
@@ -94,7 +94,7 @@ class App:
 		label_totalElevation.config(font=('helvetica', 10))
 		canvas1.create_window(300, 500, window=label_totalElevation)
 		
-		label_totalElevationValue = tk.Label(root, text=routing.get_path_elevation(path, self.graph))
+		label_totalElevationValue = tk.Label(root, text=str(round(routing.get_path_elevation(path, self.graph), 2)) + " m")
 		label_totalElevationValue.config(font=('helvetica', 10))
 		canvas1.create_window(400, 500, window=label_totalElevationValue)
 		
@@ -102,9 +102,17 @@ class App:
 		label_totalDistance.config(font=('helvetica', 10))
 		canvas1.create_window(300, 530, window=label_totalDistance)
 		
-		label_totalDistanceValue = tk.Label(root, text=routing.get_total_path_length(path, self.graph))
+		label_totalDistanceValue = tk.Label(root, text=str(round(routing.get_total_path_length(path, self.graph), 2)) + " m")
 		label_totalDistanceValue.config(font=('helvetica', 10))
 		canvas1.create_window(400, 530, window=label_totalDistanceValue)
+
+		label_shortestDistance = tk.Label(root, text='Shortest Distance:')
+		label_shortestDistance.config(font=('helvetica', 10))
+		canvas1.create_window(290, 560, window=label_shortestDistance)
+
+		label_shortestDistanceValue = tk.Label(root, text=str(round(routing.get_total_path_length(shortest_path, self.graph), 2)) + " m")
+		label_shortestDistanceValue.config(font=('helvetica', 10))
+		canvas1.create_window(400, 560, window=label_shortestDistanceValue)
 
 		positions = {}
 
@@ -132,7 +140,8 @@ def main():
 	app.set_graph()
 	app.set_start_end_nodes()
 	path = app.find_route()
-	app.display_path(path)
+	shortest_path = osmnx.distance.shortest_path(app.graph, app.start, app.end)
+	app.display_path(path, shortest_path)
 
 if __name__ == '__main__':
 	main()
