@@ -3,6 +3,7 @@ import heapq
 import sys
 sys.path.insert(0, '.')
 from src.routing_mode import RoutingMode
+from src.routing_helper import RoutingHelper
 
 class RoutingDijkstra(RoutingMode):
 	"""
@@ -42,7 +43,7 @@ class RoutingDijkstra(RoutingMode):
 
 		visited = set()
 
-		max_length = super(RoutingDijkstra, self).find_max_length(graph, x, start, end)
+		max_length = RoutingHelper().find_max_length(graph, x, start, end)
 		if max_length == -1:
 			return None
 
@@ -69,7 +70,7 @@ class RoutingDijkstra(RoutingMode):
 				distance_to_next_node = graph[current_node][next_node][0]["length"]
 				total_new_distance = distances[current_node] + distance_to_next_node    
 
-				elevation_to_next_node = super(RoutingDijkstra, self).get_elevation_diff(graph, current_node, next_node) 
+				elevation_to_next_node = RoutingHelper().get_elevation_diff(graph, current_node, next_node) 
 				total_elevation = elevations[current_node] + elevation_to_next_node
 
 				#if the total distance is greater than max length, this is an invalid path
@@ -81,7 +82,7 @@ class RoutingDijkstra(RoutingMode):
 					else:
 						heapq.heappush(queue, (0, total_new_distance, next_node, current_node))
 
-		return super(RoutingDijkstra, self).get_path_from_previous_nodes(previous_nodes, start, end)
+		return RoutingHelper().get_path_from_previous_nodes(previous_nodes, start, end)
 
 class RoutingAStar(RoutingMode):
 	"""
@@ -113,10 +114,10 @@ class RoutingAStar(RoutingMode):
 		queue = []
 
 		#queue element stores (f_elevation, g_elevation, total distance from start to current node, current node, previous node)
-		heapq.heappush(queue, (super(RoutingAStar, self).get_elevation_diff(graph, start, end), 0, 0, start, None))
+		heapq.heappush(queue, (RoutingHelper().get_elevation_diff(graph, start, end), 0, 0, start, None))
 
 		visited = set()
-		max_length = super(RoutingAStar, self).find_max_length(graph, x, start, end)
+		max_length = RoutingHelper().find_max_length(graph, x, start, end)
 	
 		if max_length == -1:
 			return None
@@ -144,13 +145,13 @@ class RoutingAStar(RoutingMode):
 				if next_node == current_node:
 					continue
 
-				g_elevation_to_next_node = super(RoutingAStar, self).get_elevation_diff(graph, current_node, next_node)
+				g_elevation_to_next_node = RoutingHelper().get_elevation_diff(graph, current_node, next_node)
 				g_total_new_elevation = g_elevations[current_node] + g_elevation_to_next_node
 
 				distance_to_next_node = graph[current_node][next_node][0]["length"]
 				total_new_distance = distances[current_node] + distance_to_next_node
 
-				heuristic = super(RoutingAStar, self).get_elevation_diff(graph, next_node, end)
+				heuristic = RoutingHelper().get_elevation_diff(graph, next_node, end)
 
 				#if the total distance is greater than max length, this is an invalid path
 				if total_new_distance <= max_length and next_node not in visited:
@@ -161,7 +162,7 @@ class RoutingAStar(RoutingMode):
 					else:
 						heapq.heappush(queue, (0, 0, total_new_distance, next_node, current_node))
 
-		return super(RoutingAStar, self).get_path_from_previous_nodes(previous_nodes, start, end)
+		return RoutingHelper().get_path_from_previous_nodes(previous_nodes, start, end)
 
 class RoutingBFS(RoutingMode):
 	"""
@@ -256,6 +257,6 @@ class RoutingDFS(RoutingMode):
 					previous_nodes[next_node] = current_node
 
 					if next_node == end:
-						return super(RoutingDFS, self).get_path_from_previous_nodes(previous_nodes, start, end)
+						return RoutingHelper().get_path_from_previous_nodes(previous_nodes, start, end)
 	
 		return None
