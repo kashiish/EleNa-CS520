@@ -6,14 +6,12 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 	Runs Dijkstra shortest path algorithm to find a route that either maximizes or minimizes elevation gain
 	from start to end location within x% of the shortest path. 
 	If elevation_setting is None, it finds the shortest path from start to end.
-
 	params:
 		graph: networkx multidigraph - the area we are searching in
 		start: int - the starting location of the route
 		end: int - the end location of the route
 		x: float - the percentage we can deviate from the shortest path length
 		elevation_setting: string - either "maximize", "minimize", or None
-
 	return: list - a route from start to end or None if a route does not exist
 	"""
 
@@ -149,12 +147,10 @@ def bfs(graph, start, end):
     """
    **EXPERIMENTAL USE ONLY**
 	Runs BFS shortest path algorithm to find a shortest path from start to end location.
-
 	params:
 		graph: networkx multidigraph - the area we are searching in
 		start: int - the starting location of the route
 		end: int - the end location of the route
-
 	return: list - a route from start to end or None if a route does not exist
 	"""
     queue = []
@@ -189,12 +185,10 @@ def dfs(graph, start, end):
     """
      **EXPERIMENTAL USE ONLY**
         Runs DFS path algorithm from start to end location to find shortest path
-
         params:
             graph: networkx multidigraph - the area we are searching in
 		    start: int - the starting location of the route
 		    end: int - the end location of the route
-
         return: list - a route from start to end or None if a route does not exist
     """
         
@@ -232,15 +226,12 @@ def find_max_length(graph, x, start, end):
 	Uses the osmnx API to find the shortest possible route from start to end node and multiplies
 	this number by x to find the longest possible route we can create. Returns -1 if no possible
 	path exists. 
-
 	params:
 		graph: networkx multidigraph - the area we are searching in
 		x: float, the percentage we can deviate from the shortest path length
 		start: int - the starting location of the route
 		end: int - the end location of the route
-
 	return: float, length of the longest possible route
-
 	"""
 	shortest_path = osmnx.distance.shortest_path(graph, start, end)
 	if shortest_path is None:
@@ -252,12 +243,10 @@ def find_max_length(graph, x, start, end):
 def get_elevation_diff(graph, node1, node2):
 	"""
 	Finds the elevation difference between two nodes.
-
 	params:
 		graph: networkx multidigraph - the area we are searching in
 		node1: int
 		node2: int
-
 	return: float
 	"""
 	return max(0, graph.nodes[node2]["elevation"] - graph.nodes[node1]["elevation"])
@@ -269,7 +258,6 @@ def get_path_elevation(nodes, graph):
 	params:
 		nodes: list of ints (node IDs)
 		graph: networkx multidigraph - the area we are searching in, contains `nodes`
-
 	return: int, the total elevation from start to end node in the path
 	"""
 	elevation = 0
@@ -282,11 +270,9 @@ def get_path_elevation(nodes, graph):
 def get_total_path_length(nodes, graph):
 	"""
 	Calculates the total length of the path containing `nodes`. 
-
 	params:
 		nodes: list of ints (node IDs)
 		graph: networkx multidigraph - the area we are searching in, contains `nodes`
-
 	return: int, the total distance from start to end node in the path
 	"""
 	distance = 0
@@ -299,12 +285,10 @@ def get_total_path_length(nodes, graph):
 def get_path_from_previous_nodes(previous_nodes, start, end):
 	"""
 	Returns a list of the path using `previous_nodes` (specific to Dijkstra).
-
 	params:
 		previous_nodes: dict, key is a node ID and value is the ID of node that points to the key node in this path
 		start: int, node ID
 		end: int, node ID
-
 	return: list of ints, the complete path from start to end node
 	"""
 	path = [end]
