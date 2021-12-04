@@ -1,13 +1,8 @@
-from abc import ABC, abstractmethod
 import osmnx
 
-class RoutingMode(ABC):
+class RoutingHelper():
 	"""
-		RoutingMode interface defines actions that will be used by all the routing modes, but implemented with different behavior. It will also have the shared operations that will be used across all routings.
-
-		The Context class can use this routing strategy. 
-
-		Cite: https://www.tutorialspoint.com/design_pattern/strategy_pattern.html
+		RoutingHelper class contains all the helper methods needed to calculate more information about the routes found. 
 	"""
 
 	def __init__(self):
@@ -99,9 +94,4 @@ class RoutingMode(ABC):
 			current_node = previous_nodes[current_node]
 			path.append(current_node)
 		path.reverse()
-		#print(path)
 		return path
-
-	@abstractmethod
-	def routing_action(self, graph, start, end, x, elevation_setting):
-		pass

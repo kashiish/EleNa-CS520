@@ -68,16 +68,16 @@ class App:
 
 	def strategy_find_route(self):
 		if self.routing_method == "dijkstra":
-			context = Context(RoutingDijkstra(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			context = Context(RoutingDijkstra())
 			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
 		elif self.routing_method == "a*":
-			context = Context(RoutingAStar(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			context = Context(RoutingAStar())
 			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
 		elif self.routing_method == "bfs":
-			context = Context(RoutingBFS(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			context = Context(RoutingBFS())
 			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
 		elif self.routing_method  == "dfs":
-			context = Context(RoutingDFS(self.graph, self.start, self.end, self.x, self.elevation_gain_mode))
+			context = Context(RoutingDFS())
 			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
 		else:
 			print("Invalid routing method selected.")

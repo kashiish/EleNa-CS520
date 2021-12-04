@@ -1,14 +1,16 @@
 import osmnx
 import heapq
-from routing_mode import RoutingMode
+import sys
+sys.path.insert(0, '.')
+from src.routing_mode import RoutingMode
 
 class RoutingDijkstra(RoutingMode):
 	"""
 	Represents Dikstra routing for path finding solution
 
 	"""
-	def __init__(self, graph, start, end, x, elevation_setting):
-		super().__init__(graph, start, end, x, elevation_setting)
+	def __init__(self):
+		super().__init__()
 
 	def routing_action(self, graph, start, end, x=0, elevation_setting=None):
 		"""
@@ -86,10 +88,10 @@ class RoutingAStar(RoutingMode):
 	Represents A* routing for path finding solution
 
 	"""
-	def __init__(self, graph, start, end, x, elevation_setting):
-		super().__init__(graph, start, end, x, elevation_setting)
+	def __init__(self):
+		super().__init__()
 
-	def routing_action(graph, start, end, x=0, elevation_setting=None):
+	def routing_action(self, graph, start, end, x=0, elevation_setting=None):
 		"""
 		Runs A* shortest path algorithm to find a route that either maximizes or minimizes elevation gain
 		from start to end location within x% of the shortest path. 
@@ -166,10 +168,10 @@ class RoutingBFS(RoutingMode):
 	Represents BFS routing for path finding solution
 
 	"""
-	def __init__(self, graph, start, end, x, elevation_setting):
-		super().__init__(graph, start, end, x, elevation_setting)
+	def __init__(self):
+		super().__init__()
 
-	def routing_action(graph, start, end, x=0, elevation_setting=None):
+	def routing_action(self, graph, start, end, x=0, elevation_setting=None):
 		"""
 		**EXPERIMENTAL USE ONLY**
 		Runs BFS shortest path algorithm to find a shortest path from start to end location.
@@ -214,10 +216,10 @@ class RoutingDFS(RoutingMode):
 	Represents DFS routing for path finding solution
 
 	"""
-	def __init__(self, graph, start, end, x, elevation_setting):
-		super().__init__(graph, start, end, x, elevation_setting)
+	def __init__(self):
+		super().__init__()
 
-	def routing_action(graph, start, end, x=0, elevation_setting=None):
+	def routing_action(self, graph, start, end, x=0, elevation_setting=None):
 		"""
 		**EXPERIMENTAL USE ONLY**
 			Runs DFS path algorithm from start to end location to find shortest path
