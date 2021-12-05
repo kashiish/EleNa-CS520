@@ -9,7 +9,7 @@ the two locations to x% of the shortest path.
 
 # How to Run
 ## Backend
-To use EleNa on your system, run `pip3 install -r requirements.txt` in the `src` directory of EleNa. This will get you all the needed Python dependencies for you have the project run locally. 
+To use EleNa on your system, run `pip3 install -r requirements.txt` in the root directory of EleNa. This will get you all the needed Python dependencies for you have the project run locally. 
 
 Then, simply run `python3 src/app.py` in the root directory. Now, you will be prompted to enter details of yours desired travel, such as start and end location, preferred routing algorithm, mode of transporation, etc. 
 
