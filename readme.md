@@ -7,7 +7,7 @@ The high-level goal of this project is to develop a software system that determi
 end location, a route that maximizes or minimizes elevation gain, while limiting the total distance between
 the two locations to x% of the shortest path.
 
-# APIs
+## APIs
 
 TODO
 
