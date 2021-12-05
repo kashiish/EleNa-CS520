@@ -39,12 +39,13 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 		current = heapq.heappop(queue)
 		current_node = current[2]
 
+		#either we have not seen this node before or we have found a shorter path to this node
 		if current_node not in distances or (distances[current_node] > current[1]):
 			elevations[current_node] = current[0] if elevation_setting == "minimize" else -current[0]
 			distances[current_node] = current[1]
 			previous_nodes[current_node] = current[3]
 
-		#we've found a complete path, stop searching
+		#we've found the best path, stop searching
 		if current_node == end:
 			break
 
@@ -56,15 +57,13 @@ def dijkstra(graph, start, end, x=0, elevation_setting=None):
 			#avoid self loops
 			if next_node == current_node:
 				continue
+
 			distance_to_next_node = graph[current_node][next_node][0]["length"]
 			total_new_distance = current[1] + distance_to_next_node
 			total_old_distance = float("inf") if next_node not in distances else distances[next_node]	
 
 			elevation_to_next_node = get_elevation_diff(graph, current_node, next_node) 
-			current_elevation = current[0]
-			if elevation_setting == "maximize":
-				current_elevation = -current_elevation
-			total_elevation = current_elevation + elevation_to_next_node
+			total_elevation = elevations[current_node] + elevation_to_next_node
 
 
 			#if the total distance is greater than max length, this is an invalid path
@@ -104,7 +103,7 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 
 	visited = set()
 	max_length = find_max_length(graph, x, start, end)
-	
+
 	if max_length == -1:
 		return None
 
@@ -112,15 +111,16 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 		current = heapq.heappop(queue)
 		current_node = current[3]
 
-		if current_node not in f_elevations or (elevation_setting == "maximize" and f_elevations[current_node] < -current[0]) or (elevation_setting == "minimize" and f_elevations[current_node] > current[0]):
+		#either we have not seen this node before or we have found a shorter path to this node
+		if current_node not in distances or (distances[current_node] > current[2]):
 			f_elevations[current_node] = current[0] if elevation_setting == "minimize" else -current[0]
 			g_elevations[current_node] = current[1]
 			distances[current_node] = current[2]
 			previous_nodes[current_node] = current[4]
 
-		#we've found a complete path, stop searching this path
+		#we've found the best path, stop searching
 		if current_node == end:
-			continue
+			break
 
 		visited.add(current_node)
 	
@@ -136,11 +136,12 @@ def a_star(graph, start, end, x=0, elevation_setting=None):
 
 			distance_to_next_node = graph[current_node][next_node][0]["length"]
 			total_new_distance = distances[current_node] + distance_to_next_node
+			total_old_distance = float("inf") if next_node not in distances else distances[next_node]
 
 			heuristic = get_elevation_diff(graph, next_node, end)
 
 			#if the total distance is greater than max length, this is an invalid path
-			if total_new_distance <= max_length and next_node not in visited:
+			if total_new_distance <= max_length and (next_node not in visited or total_new_distance < total_old_distance):
 				if elevation_setting == "maximize":
 					heapq.heappush(queue, (-g_total_new_elevation - heuristic, g_total_new_elevation, total_new_distance, next_node, current_node))
 				elif elevation_setting == "minimize":

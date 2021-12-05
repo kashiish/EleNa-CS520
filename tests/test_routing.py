@@ -391,8 +391,8 @@ class TestAStar:
 		a_star_length = routing.get_total_path_length(a_star_path, small_test_graph)
 
 	def test_medium_max_elevation(self, medium_test_graph):
-		start_node = 0
-		end_node = 2
+		start_node = 3
+		end_node = 7
 
 		x = 75
 
@@ -540,12 +540,12 @@ class TestAStar:
 # 		assert dfs_path == None
 	
 
-
+#FOR TESTING PURPOSES
 def show_graph(graph_name):
 	with open("cached_maps/{}".format(graph_name), 'rb') as file:
 		graph = pkl.load(file)
 		positions = {}
-		labels = {}
+		node_labels = {}
 
 		for node in list(graph.nodes(data=True)):
 			xy = []
@@ -556,10 +556,10 @@ def show_graph(graph_name):
 			positions[int(node[0])] = xy
 
 		for i in range(len(list(graph.nodes))):
-			labels[i] = i
+			node_labels[i] = i
 
 
-		print(list(graph.nodes(data=True)))
+		# print(list(graph.nodes(data=True)))
 
 		nx.draw(graph, positions)
 		nx.draw_networkx_labels(graph, positions, labels, font_size=10)
