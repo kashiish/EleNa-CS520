@@ -65,7 +65,6 @@ class TestDijkstra:
 
 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
 		dijkstra_path = routing.dijkstra(small_test_graph, start_node, end_node, x, elevation_setting)
-
 		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
 		dijkstra_path_elevation = routing.get_path_elevation(dijkstra_path, small_test_graph)
 
@@ -198,8 +197,8 @@ class TestDijkstra:
 		assert shortest_path_elevation == dijkstra_path_elevation
 
 	def test_medium_max_elevation(self, medium_test_graph):
-		start_node = 0
-		end_node = 2
+		start_node = 3
+		end_node = 7
 
 		x = 75
 
@@ -567,4 +566,4 @@ def show_graph(graph_name):
 		nx.draw_networkx_edge_labels(graph, positions, font_size=5)
 		plt.show()
 
-show_graph("test-small-uniform-graph.pkl")
+# show_graph("test-medium-graph.pkl")
