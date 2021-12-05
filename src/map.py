@@ -2,16 +2,36 @@ import osmnx
 import pickle as pkl
 import networkx as nx
 import requests
+import sys
 
-def get_map_data(place_query):
+def download_map(place_query):
+	"""
+	Downloads a map for the specified location from the OSM API. Elevation data for each node in the map (networkx.MultiDiGraph)
+	is added from the Open Elevation API. Each edge has stores length (in meters) from node1 to node2.
+	This graph is stored in a pickle file in `/cached_maps`. 
+
+	params: 
+		place_query: dict of city, state, country
+	"""
 	transport_methods = ["drive", "bike", "walk"]
-	for transport_method in transport_methods:
-		graph = osmnx.graph_from_place(place_query, network_type=transport_method)
-		add_elevation_data(graph)
-		filename = "cached_maps/{}-{}.pkl".format(place_query["city"].lower(), transport_method)
-		pkl.dump(graph, open(filename, "wb"))
+	try:
+		for transport_method in transport_methods:
+			graph = osmnx.graph_from_place(place_query, network_type=transport_method)
+			add_elevation_data(graph)
+			filename = "cached_maps/{}-{}.pkl".format(place_query["city"].lower(), transport_method)
+			pkl.dump(graph, open(filename, "wb"))
+	except ValueError:
+		print("No results for the specified location.")
 
 def add_elevation_data(graph):
+	"""
+	Adds elevation data for each node in `graph` using the Open Elevation API. 
+	
+	params:
+		graph: networkx.MultiDiGraph where each node contains latitude and longitude data
+
+	return: graph where nodes contain latitude, longitude, and elevation data
+	"""
 	max_batch_size = 100
 
 	nodes_data = list(graph.nodes(data=True))
@@ -39,11 +59,11 @@ def add_elevation_data(graph):
 
 	return graph
 
-	
-#get map data for Boulder
-get_map_data({"city": "Boulder", "state": "Colorado", "country": "USA"})
+if __name__ == '__main__':
+	if len(sys.argv) != 4:
+		print("Expected: python src/map.py <city> <state> <country>")
+		exit()
 
-# to load cached map
-# with open("Boulder-drive.pkl", 'rb') as file:
-# 		graph = pkl.load(file)
-# 		print(list(graph.nodes(data=True)))
+	location = {"city": sys.argv[1], "state": sys.argv[2], "country": sys.argv[3]}
+
+	download_map(location)
