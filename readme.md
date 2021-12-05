@@ -23,6 +23,8 @@ Note: The current version of EleNa uses Boulder, Colorado's map so only addresse
 
 ## Python GUI
 
+TODO
+
 # How to Validate
 We have written a series of tests for the Dijkstra and A* algorithms. To run the tests, run `pytest` in the root directory. 
 
