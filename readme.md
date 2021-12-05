@@ -7,12 +7,23 @@ The high-level goal of this project is to develop a software system that determi
 end location, a route that maximizes or minimizes elevation gain, while limiting the total distance between
 the two locations to x% of the shortest path.
 
+# APIs
+
+TODO
+
 # How to Run
 ## Backend
 To use EleNa on your system, run `pip3 install -r requirements.txt` in the root directory of EleNa. This will get you all the needed Python dependencies for you have the project run locally. 
 
 Then, simply run `python3 src/app.py` in the root directory. Now, you will be prompted to enter details of yours desired travel, such as start and end location, preferred routing algorithm, mode of transporation, etc. 
 
+Note: The current version of EleNa uses Boulder, Colorado's map so only addresses in Boulder will work. We are using a cached version of the Boulder map that was downloaded on 11/8/2021. If you would like to download an updated copy of the map or use the map of a different city please run:
+
+`python src/map.py <city> <state> <country>`  from the root directory.
+
 ## Python GUI
 
-# How to Validate (ADD TESTING)
+# How to Validate
+We have written a series of tests for the Dijkstra and A* algorithms. To run the tests, run `pytest` in the root directory. 
+
+**NOTE: This app has only been tested with Python3**
