@@ -332,17 +332,19 @@ class TestAStar:
 # 		assert shortest_path == None
 # 		assert bfs_path == None
 
-# class TestDFS:
-# 	def test_small_graph(self, small_test_graph):
-# 		start_node = 1
-# 		end_node = 4
+class TestDFS:
+	def test_small_graph(self, small_test_graph):
+		start_node = 1
+		end_node = 4
+		x = 40
 
-# 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
-# 		dfs_path = routing.dfs(small_test_graph, start_node, end_node)
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node,x)
 
-# 		print("shortest path", shortest_path)
-# 		print("dfs path", dfs_path)
-
+		
+		print("shortest path", shortest_path)
+		print("dfs path", dfs_path)
+		assert(False)
 # 		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
 # 		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
 

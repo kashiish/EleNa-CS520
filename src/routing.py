@@ -185,7 +185,58 @@ def bfs(graph, start, end):
     # if no paths found return None
     return None
 
-def dfs(graph, start, end):
+def dfs(graph, start, end, x=0, elevation_setting=None):
+	"""
+		Runs DFS path algorithm from start to end location to find all paths from start to end
+		and then only looking at paths that are <= max length 
+
+		params:
+			graph: networkx multidigraph - the area we are searching in
+			start: int - the starting location of the route
+			end: int - the end location of the route
+
+		return: list - a route from start to end or None if a route does not exist
+	"""
+
+	print("length of graph.nodes: ",(len(graph.nodes()) ))
+	# print("graph: ",graph)
+	print("start node: ", start)
+	visited = {}
+	for node in graph.nodes:
+		visited[node] = 0
+		
+	path = []
+	allPaths = []
+	max_length = find_max_length(graph, x, start, end)
+
+	def dfsGetAllPaths(graph,start,end,visited,path):
+		visited[start] = 1
+
+		if start == end:
+			if len(path[:]) <= max_length:
+
+				print("path: ", path)
+				allPaths.append(path[:])
+		
+		for edge in graph.edges(start, data=True):
+			nextNode = edge[1]
+			if visited[nextNode] == 0:
+				# print("next node: ", nextNode)
+				path.append(nextNode)
+				dfsGetAllPaths(graph,nextNode,end,visited,path)
+				path.remove(nextNode)
+		
+		visited[start] = 0
+
+	path.append(start)
+	dfsGetAllPaths(graph,start,end,visited,path)
+	print("all paths: ", allPaths)
+
+	
+
+	return allPaths
+
+def dfs_old(graph, start, end):
     """
      **EXPERIMENTAL USE ONLY**
         Runs DFS path algorithm from start to end location to find shortest path
