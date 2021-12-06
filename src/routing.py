@@ -206,7 +206,7 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 		visited[node] = 0
 		
 	path = []
-	allPaths = []
+	all_paths = []
 	max_length = find_max_length(graph, x, start, end)
 
 	def dfsGetAllPaths(graph,start,end,visited,path):
