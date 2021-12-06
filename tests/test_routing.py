@@ -333,53 +333,121 @@ class TestAStar:
 # 		assert bfs_path == None
 
 class TestDFS:
-	def test_small_graph(self, small_test_graph):
-		start_node = 1
+	def test_small_min_elevation(self, small_test_graph):
+		start_node = 3
 		end_node = 4
-		x = 40
+
+		x = 50
+
+		elevation_setting = "minimize"
 
 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
-		dfs_path = routing.dfs(small_test_graph, start_node, end_node,x)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
 
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
+
+		max_length = routing.find_max_length(small_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert dfs_path_elevation < shortest_path_elevation
+		assert dfs_length <= max_length
+	
+	def test_medium_min_elevation(self, medium_test_graph):
+		start_node = 0
+		end_node = 2
+
+		x = 50
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, medium_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, medium_test_graph)
+
+		max_length = routing.find_max_length(medium_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+
+		assert dfs_path_elevation < shortest_path_elevation
+		assert dfs_length <= max_length
+
+	def test_small_max_elevation(self, small_test_graph):
+		start_node = 1
+		end_node = 4
+
+		x = 400 #for testing purposes, find a path that is at max 400% longer than the shortest path
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
+
+		max_length = routing.find_max_length(small_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert dfs_path_elevation > shortest_path_elevation
+		assert dfs_length <= max_length
+
+	def test_medium_max_elevation(self, medium_test_graph):
+		start_node = 0
+		end_node = 2
+
+		x = 75
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, medium_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, medium_test_graph)
+
+		max_length = routing.find_max_length(medium_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+
+		assert dfs_path_elevation > shortest_path_elevation
+		assert dfs_length <= max_length
+
+	def test_small_shortest_path(self, small_test_graph):
+		start_node = 1
+		end_node = 4
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert shortest_length == dfs_length
+		assert shortest_path == dfs_path
+
+	def test_medium_shortest_path(small, medium_test_graph):
+		start_node = 0
+		end_node = 2
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(medium_test_graph, start_node, end_node)
+
+		shortest_length = routing.get_total_path_length(shortest_path, medium_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+
+		assert shortest_length == dfs_length
+		assert shortest_path == dfs_path
+
+	def test_small_no_path(self, small_test_nonuniform_graph):
+		start_node = 1
+		end_node = 2
+		shortest_path = osmnx.distance.shortest_path(small_test_nonuniform_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_nonuniform_graph, start_node, end_node)
 		
-		print("shortest path", shortest_path)
-		print("dfs path", dfs_path)
-		assert(False)
-# 		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
-# 		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
-
-# 		print("shortest length", shortest_length)
-# 		print("dfs length", dfs_length)
-
-# 		assert shortest_length == dfs_length
-
-# 	def test_medium_graph(self, medium_test_graph):
-# 		start_node = 0
-# 		end_node = 2
-
-# 		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
-# 		dfs_path = routing.dfs(medium_test_graph, start_node, end_node)
-
-# 		print("shortest path", shortest_path)
-# 		print("dfs path", dfs_path)
-
-# 		shortest_length = routing.get_total_path_length(shortest_path, medium_test_graph)
-# 		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
-
-# 		print("shortest length", shortest_length)
-# 		print("dfs length", dfs_length)
-
-# 		assert shortest_length == dfs_length
-
-# 	def test_small_no_path(self, small_test_nonuniform_graph):
-# 		start_node = 1
-# 		end_node = 2
-		
-# 		shortest_path = osmnx.distance.shortest_path(small_test_nonuniform_graph, start_node, end_node)
-# 		dfs_path = routing.dfs(small_test_nonuniform_graph, start_node, end_node)
-		
-# 		assert shortest_path == None
-# 		assert dfs_path == None
+		assert shortest_path == None
+		assert dfs_path == None
+	
 	
 
 
@@ -408,4 +476,4 @@ def show_graph(graph_name):
 		nx.draw_networkx_edge_labels(graph, positions, font_size=5)
 		plt.show()
 
-# show_graph("test-small-uniform-graph.pkl")
+show_graph("test-medium-graph.pkl")

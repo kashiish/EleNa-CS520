@@ -1,5 +1,7 @@
+from typing import final
 import osmnx
 import heapq
+import sys
 
 def dijkstra(graph, start, end, x=0, elevation_setting=None):
 	"""
@@ -201,40 +203,133 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	print("length of graph.nodes: ",(len(graph.nodes()) ))
 	# print("graph: ",graph)
 	print("start node: ", start)
+	print("end node: ", end)
 	visited = {}
 	for node in graph.nodes:
 		visited[node] = 0
 		
 	path = []
-	all_paths = []
+	
 	max_length = find_max_length(graph, x, start, end)
+	if max_length == -1:
+		return None
+	print("max length: ", max_length)
 
-	def dfsGetAllPaths(graph,start,end,visited,path):
-		visited[start] = 1
-
-		if start == end:
-			if len(path[:]) <= max_length:
-
+	shortest_path_osm = osmnx.distance.shortest_path(graph, start, end)
+	
+	print("shortest path osm", shortest_path_osm)
+	print("path len: ", get_total_path_length(shortest_path_osm,graph))
+	all_paths = []
+	def dfs_get_all_paths(graph, current, visited, path, depth):
+		# visited[start] = 1
+		# print("current", current)
+		if current == end:
+			if get_total_path_length(path, graph) <= max_length:
 				print("path: ", path)
-				allPaths.append(path[:])
-		
-		for edge in graph.edges(start, data=True):
-			next_node = edge[1]
-			if visited[nextNode] == 0:
-				# print("next node: ", nextNode)
-				path.append(nextNode)
-				dfsGetAllPaths(graph,nextNode,end,visited,path)
-				path.remove(nextNode)
-		
-		visited[start] = 0
+				all_paths.append(path[:])
+			return
 
-	path.append(start)
-	dfsGetAllPaths(graph,start,end,visited,path)
-	print("all paths: ", allPaths)
+		if depth == 0:
+			# print("depth limit reached")
+			return
+
+		for edge in graph.edges(current, data=True):
+
+			next_node = edge[1]
+			
+			if visited[next_node] == 0:
+				# print("next node: ", next_node)
+				visited[next_node] = 1
+				path.append(next_node)
+				dfs_get_all_paths(graph, next_node, visited, path, depth - 1)
+				path.remove(next_node)
+				visited[next_node] = 0
 
 	
+	path.append(start)
+	visited[start] = 1
+	dfs_get_all_paths(graph,start,visited,path, 50)
+	print("all paths: ", all_paths)
 
-	return allPaths
+	elevation = []
+	shortest = sys.maxsize
+	shortest_path = 0
+
+	for p in all_paths:
+		elevation.append((p,get_path_elevation(p, graph)))
+		path_len = get_total_path_length(p,graph)
+		if path_len<shortest:
+			shortest = path_len
+			shortest_path = p
+	
+	finalPath = []
+	elevation.sort(key=lambda x: x[1])
+
+	if elevation_setting == "maximize":
+		max_elevation = elevation[-1][0]
+		finalPath = max_elevation
+	elif elevation_setting == "minimize":
+		min_elevation = elevation[0][0]
+		finalPath = min_elevation
+	else:
+		finalPath = shortest_path
+	
+	return finalPath
+
+		
+		
+
+		
+		
+
+		
+
+	
+	# print("dfs shortest path: ", shortest_path)
+
+
+
+	# 
+
+
+
+	# def dfsGetAllPaths(graph,start,end,visited,path):
+	# 	visited[start] = 1
+
+	# 	if start == end:
+	# 		print("path length: ", get_total_path_length(path,graph))
+	# 		if get_total_path_length(path,graph) <= max_length:
+
+	# 			print("path: ", path)
+	# 			all_Paths.append(path[:])
+	# 			return
+		
+	# for edge in graph.edges(start, data=True):
+	# 	next_node = edge[1]
+	# 	if visited[nextNode] == 0:
+	# 		# print("next node: ", nextNode)
+	# 		path.append(nextNode)
+	# 		dfsGetAllPaths(graph,nextNode,end,visited,path)
+	# 		path.remove(nextNode)
+
+	# 	for edge in graph.edges(start, data=True):
+	# 		next_Node = edge[1]
+	# 		if visited[next_Node] == 0:
+	# 			# print("next node: ", next_Node)
+	# 			path.append(next_Node)
+	# 			dfsGetAllPaths(graph,next_Node,end,visited,path)
+	# 			path.remove(next_Node)
+		
+	# 	visited[start] = 0
+
+	# path.append(start)
+	# dfsGetAllPaths(graph,start,end,visited,path)
+	# print("all paths: ", all_Paths)
+
+	
+	
+	# return shortest_path
+	
 
 def dfs_old(graph, start, end):
     """
