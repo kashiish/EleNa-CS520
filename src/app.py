@@ -13,6 +13,7 @@ class App:
 		self.x = None
 		self.transportation_mode = None
 		self.graph = None
+		self.ROUTING_METHODS = ["dijkstra", "a*"]
 		self.TRANSPORTATION_MODES = ["drive", "walk", "bike"]
 		self.ELEVATION_MODES = ["maximize", "minimize", ""]
 		self.ROUTING_METHODS = ["dijkstra", "a*"]
@@ -21,10 +22,17 @@ class App:
 		self.routing_method = None
 
 	def set_user_inputs(self):
-		self.start_address = input("Enter the address of your start location: ")
-		self.end_address = input("Enter the address of your end location: ")
-		self.routing_method = input("Enter the routing algorithm you would like to use (Dijkstra, A*): ").lower()
+		self.start_address = ""
 
+		while not self.start_address:
+			self.start_address = input("Enter the address of your start location: ")
+
+		self.end_address = ""
+
+		while not self.end_address:
+			self.end_address = input("Enter the address of your end location: ")
+
+		self.routing_method = ""
 		while self.routing_method not in self.ROUTING_METHODS:
 			self.routing_method = input("Enter the routing algorithm you would like to use (Dijkstra, A*): ").lower()
 
@@ -64,10 +72,6 @@ class App:
 			return routing.dijkstra(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
 		elif self.routing_method == "a*":
 			return routing.a_star(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
-		elif self.routing_method == "bfs":
-			return routing.bfs(self.graph, self.start, self.end)
-		elif self.routing_method  == "dfs":
-			return routing.dfs(self.graph, self.start, self.end)
 		else:
 			print("Invalid routing method selected.")
 			return None
