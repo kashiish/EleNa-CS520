@@ -10,6 +10,7 @@ class App:
 		self.x = None
 		self.transportation_mode = None
 		self.graph = None
+		self.ROUTING_METHODS = ["dijkstra", "a*"]
 		self.TRANSPORTATION_MODES = ["drive", "walk", "bike"]
 		self.ELEVATION_MODES = ["maximize", "minimize", ""]
 		self.start = None
@@ -17,9 +18,22 @@ class App:
 		self.routing_method = None
 
 	def set_user_inputs(self):
-		self.start_address = input("Enter the address of your start location: ")
-		self.end_address = input("Enter the address of your end location: ")
-		self.routing_method = input("Enter the routing algorithm you would like to use (BFS, DFS, Dijkstra, A*): ").lower()
+		self.start_address = ""
+
+		while not self.start_address:
+			self.start_address = input("Enter the address of your start location: ")
+
+		self.end_address = ""
+
+		while not self.end_address:
+			self.end_address = input("Enter the address of your end location: ")
+
+		self.routing_method = ""
+
+		while self.routing_method not in self.ROUTING_METHODS:
+			self.routing_method = input("Enter the routing algorithm you would like to use (Dijkstra, A*): ").lower()
+
+
 		self.elevation_gain_mode = input("Type 'maximize' if you want to maximize elevation gain, or 'minimize' if you want to minimize elevation gain (no quotes), or press enter to skip & to get the shortest route: ")
 		while self.elevation_gain_mode not in self.ELEVATION_MODES:
 			self.elevation_gain_mode = input("Please enter a valid option between maximize, minimize, or enter to skip and get shortest route: ")
@@ -56,10 +70,6 @@ class App:
 			return routing.dijkstra(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
 		elif self.routing_method == "a*":
 			return routing.a_star(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
-		elif self.routing_method == "bfs":
-			return routing.bfs(self.graph, self.start, self.end)
-		elif self.routing_method  == "dfs":
-			return routing.dfs(self.graph, self.start, self.end)
 		else:
 			print("Invalid routing method selected.")
 			return None
@@ -69,7 +79,14 @@ def main():
 	app.set_user_inputs()
 	app.set_graph()
 	app.set_start_end_nodes()
-	app.find_route()
+	path = app.find_route()
+	print("path: ", path)
+	print("elevation: ", routing.get_path_elevation(path, app.graph))
+	print("total length: ", routing.get_total_path_length(path, app.graph))
+	shortest_path = osmnx.distance.shortest_path(app.graph, app.start, app.end)
+	print("shortest path: ", shortest_path)
+	print("shortest path elevation: ", routing.get_path_elevation(shortest_path, app.graph))
+	print("shortest path length: ", routing.get_total_path_length(shortest_path, app.graph))
 
 if __name__ == '__main__':
 	main()

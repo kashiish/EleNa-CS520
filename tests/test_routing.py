@@ -65,7 +65,6 @@ class TestDijkstra:
 
 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
 		dijkstra_path = routing.dijkstra(small_test_graph, start_node, end_node, x, elevation_setting)
-
 		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
 		dijkstra_path_elevation = routing.get_path_elevation(dijkstra_path, small_test_graph)
 
@@ -74,6 +73,47 @@ class TestDijkstra:
 
 		assert dijkstra_path_elevation < shortest_path_elevation
 		assert dijkstra_length <= max_length
+
+	def test_small_min_elevation_no_variance(self, small_test_graph):
+		start_node = 3
+		end_node = 4
+
+		x = 0 
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dijkstra_path = routing.dijkstra(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dijkstra_path_elevation = routing.get_path_elevation(dijkstra_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dijkstra_length = routing.get_total_path_length(dijkstra_path, small_test_graph)
+
+		assert shortest_length == dijkstra_length
+		assert shortest_path_elevation == dijkstra_path_elevation
+
+	def test_small_min_elevation_no_other_path(self, small_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
+		start_node = 0
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dijkstra_path = routing.dijkstra(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dijkstra_path_elevation = routing.get_path_elevation(dijkstra_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dijkstra_length = routing.get_total_path_length(dijkstra_path, small_test_graph)
+
+		assert shortest_length == dijkstra_length
+		assert shortest_path_elevation == dijkstra_path_elevation
 
 	def test_medium_min_elevation(self, medium_test_graph):
 		start_node = 0
@@ -115,9 +155,50 @@ class TestDijkstra:
 		assert dijkstra_path_elevation > shortest_path_elevation
 		assert dijkstra_length <= max_length
 
-	def test_medium_max_elevation(self, medium_test_graph):
+	def test_small_max_elevation_no_variance(self, small_test_graph):
+		start_node = 1
+		end_node = 4
+
+		x = 0 
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dijkstra_path = routing.dijkstra(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dijkstra_path_elevation = routing.get_path_elevation(dijkstra_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dijkstra_length = routing.get_total_path_length(dijkstra_path, small_test_graph)
+
+		assert shortest_length == dijkstra_length
+		assert shortest_path_elevation == dijkstra_path_elevation
+
+	def test_small_max_elevation_no_other_path(self, small_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
 		start_node = 0
-		end_node = 2
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dijkstra_path = routing.dijkstra(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dijkstra_path_elevation = routing.get_path_elevation(dijkstra_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dijkstra_length = routing.get_total_path_length(dijkstra_path, small_test_graph)
+
+		assert shortest_length == dijkstra_length
+		assert shortest_path_elevation == dijkstra_path_elevation
+
+	def test_medium_max_elevation(self, medium_test_graph):
+		start_node = 3
+		end_node = 7
 
 		x = 75
 
@@ -190,6 +271,47 @@ class TestAStar:
 		assert a_star_path_elevation < shortest_path_elevation
 		assert a_star_length <= max_length
 
+	def test_small_min_elevation_no_variance(self, small_test_graph):
+		start_node = 3
+		end_node = 4
+
+		x = 0 
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		a_star_path = routing.a_star(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		a_star_path_elevation = routing.get_path_elevation(a_star_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		a_star_length = routing.get_total_path_length(a_star_path, small_test_graph)
+
+		assert shortest_length == a_star_length
+		assert shortest_path_elevation == a_star_path_elevation
+
+	def test_small_min_elevation_no_other_path(self, small_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
+		start_node = 0
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		a_star_path = routing.a_star(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		a_star_path_elevation = routing.get_path_elevation(a_star_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		a_star_length = routing.get_total_path_length(a_star_path, small_test_graph)
+
+		assert shortest_length == a_star_length
+		assert shortest_path_elevation == a_star_path_elevation
+
 	def test_medium_min_elevation(self, medium_test_graph):
 		start_node = 0
 		end_node = 2
@@ -230,9 +352,47 @@ class TestAStar:
 		assert a_star_path_elevation > shortest_path_elevation
 		assert a_star_length <= max_length
 
-	def test_medium_max_elevation(self, medium_test_graph):
+	def test_small_max_elevation_no_variance(self, small_test_graph):
+		start_node = 1
+		end_node = 4
+
+		x = 0 
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		a_star_path = routing.a_star(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		a_star_path_elevation = routing.get_path_elevation(a_star_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		a_star_length = routing.get_total_path_length(a_star_path, small_test_graph)
+
+		assert shortest_length == a_star_length
+		assert shortest_path_elevation == a_star_path_elevation
+
+	def test_small_max_elevation_no_other_path(self, small_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
 		start_node = 0
-		end_node = 2
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		a_star_path = routing.a_star(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		a_star_path_elevation = routing.get_path_elevation(a_star_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		a_star_length = routing.get_total_path_length(a_star_path, small_test_graph)
+
+	def test_medium_max_elevation(self, medium_test_graph):
+		start_node = 3
+		end_node = 7
 
 		x = 75
 
@@ -380,12 +540,12 @@ class TestAStar:
 # 		assert dfs_path == None
 	
 
-
+#FOR TESTING PURPOSES
 def show_graph(graph_name):
 	with open("cached_maps/{}".format(graph_name), 'rb') as file:
 		graph = pkl.load(file)
 		positions = {}
-		labels = {}
+		node_labels = {}
 
 		for node in list(graph.nodes(data=True)):
 			xy = []
@@ -396,14 +556,14 @@ def show_graph(graph_name):
 			positions[int(node[0])] = xy
 
 		for i in range(len(list(graph.nodes))):
-			labels[i] = i
+			node_labels[i] = i
 
 
-		print(list(graph.nodes(data=True)))
+		# print(list(graph.nodes(data=True)))
 
 		nx.draw(graph, positions)
 		nx.draw_networkx_labels(graph, positions, labels, font_size=10)
 		nx.draw_networkx_edge_labels(graph, positions, font_size=5)
 		plt.show()
 
-# show_graph("test-small-uniform-graph.pkl")
+# show_graph("test-medium-graph.pkl")
