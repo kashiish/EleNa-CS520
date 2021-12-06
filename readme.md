@@ -14,5 +14,6 @@ To use EleNa on your system, run `pip3 install -r requirements.txt` in the `src`
 Then, simply run `python3 src/app.py` in the root directory. Now, you will be prompted to enter details of yours desired travel, such as start and end location, preferred routing algorithm, mode of transporation, etc. 
 
 ## Python GUI
+The GUI interface allows the user to view the graph of the chosen algorithm's path and the corresponding information such as elevation, distance returned from the path, and the shortest path possible. The GUI utilizes `matplotlib`  to visualize the graph and `tkinter` as well as `osmnx` to display and calculate the corresponding data.
 
 # How to Validate (ADD TESTING)
