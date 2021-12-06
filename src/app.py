@@ -110,13 +110,21 @@ class App:
 		label_totalDistanceValue.config(font=('helvetica', 10))
 		canvas1.create_window(400, 530, window=label_totalDistanceValue)
 
+		label_shortestPathElevation = tk.Label(root, text='Shortest Path Elevation:')
+		label_shortestPathElevation.config(font=('helvetica', 10))
+		canvas1.create_window(300, 560, window=label_shortestPathElevation)
+		
+		label_shortestPathElevationValue = tk.Label(root, text=str(round(routing.get_path_elevation(shortest_path, self.graph), 2)) + " m")
+		label_shortestPathElevationValue.config(font=('helvetica', 10))
+		canvas1.create_window(400, 560, window=label_shortestPathElevationValue)
+
 		label_shortestDistance = tk.Label(root, text='Shortest Distance:')
 		label_shortestDistance.config(font=('helvetica', 10))
-		canvas1.create_window(290, 560, window=label_shortestDistance)
+		canvas1.create_window(290, 590, window=label_shortestDistance)
 
 		label_shortestDistanceValue = tk.Label(root, text=str(round(routing.get_total_path_length(shortest_path, self.graph), 2)) + " m")
 		label_shortestDistanceValue.config(font=('helvetica', 10))
-		canvas1.create_window(400, 560, window=label_shortestDistanceValue)
+		canvas1.create_window(400, 590, window=label_shortestDistanceValue)
 
 		positions = {}
 
