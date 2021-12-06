@@ -22,6 +22,7 @@ Note: The current version of EleNa uses Boulder, Colorado's map so only addresse
 `python src/map.py <city> <state> <country>`  from the root directory.
 
 ## Python GUI
+The GUI interface allows the user to view the graph of the chosen algorithm's path and the corresponding information such as elevation, distance returned from the path, and the shortest path possible. The GUI utilizes `matplotlib`  to visualize the graph and `tkinter` as well as `osmnx` to display and calculate the corresponding data.
 
 TODO
 
