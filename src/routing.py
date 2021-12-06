@@ -219,7 +219,7 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 				allPaths.append(path[:])
 		
 		for edge in graph.edges(start, data=True):
-			nextNode = edge[1]
+			next_node = edge[1]
 			if visited[nextNode] == 0:
 				# print("next node: ", nextNode)
 				path.append(nextNode)
