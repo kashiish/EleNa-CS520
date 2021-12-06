@@ -3,3 +3,4 @@ networkx==2.6.3
 osmnx==1.1.2
 pytest==6.2.5
 requests==2.26.0
+tk==0.1.0
