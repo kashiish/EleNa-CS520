@@ -136,23 +136,7 @@ class App:
 		label_shortest_distance_value.config(font=('helvetica', 10))
 		canvas1.create_window(400, 590, window=label_shortest_distance_value)
 
-		positions = {}
-
-		for node in list(self.graph.nodes(data=True)):
-			xy = []
-
-			xy.append(node[1]['x'])
-			xy.append(node[1]['y'])
-
-			positions[int(node[0])] = xy
-
-		h = self.graph.subgraph(path)
-
-		nx.draw_networkx_nodes(h,pos=positions, node_color='r', node_size=5)
-		nx.draw_networkx_edges(h,pos=positions, edge_color='b')
-		
-		plt.axis('equal')
-		plt.show() 
+		osmnx.plot.plot_graph_routes(self.graph, [path, shortest_path], route_colors=["r", "b"])
 
 		root.mainloop()
 
