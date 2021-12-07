@@ -13,17 +13,18 @@ TODO
 
 # How to Run
 ## Backend
-To use EleNa on your system, run `pip3 install -r requirements.txt` in the root directory of EleNa. This will get you all the needed Python dependencies for you have the project run locally. 
+To use EleNa on your system, run `pip3 install -r requirements.txt` in the root directory of EleNa. This will get you all the needed Python dependencies for you to run the project locally. 
 
-Then, simply run `python3 src/app.py` in the root directory. Now, you will be prompted to enter details of yours desired travel, such as start and end location, preferred routing algorithm, mode of transporation, etc. 
+Then, simply run `python3 src/app.py` in the root directory. Now, you will be prompted to enter details of yours desired travel, such as start and end addresses, preferred routing algorithm, mode of transporation, etc. 
 
 Note: The current version of EleNa uses Boulder, Colorado's map so only addresses in Boulder will work. We are using a cached version of the Boulder map that was downloaded on 11/8/2021. If you would like to download an updated copy of the map or use the map of a different city please run:
 
 `python src/map.py <city> <state> <country>`  from the root directory.
 
 ## Python GUI
+The GUI interface allows the user to view the graph of the chosen algorithm's path and the corresponding information such as elevation, distance returned from the path, and the shortest path possible. The GUI utilizes `matplotlib`  to visualize the graph and `tkinter` as well as `osmnx` to display and calculate the corresponding data.
 
-TODO
+**Note: Tkinter may need to be installed manually according to your operating system**  
 
 # How to Validate
 We have written a series of tests for the Dijkstra and A* algorithms. To run the tests, run `pytest` in the root directory. 
