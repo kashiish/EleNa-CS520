@@ -492,52 +492,165 @@ class TestAStar:
 # 		assert shortest_path == None
 # 		assert bfs_path == None
 
-# class TestDFS:
-# 	def test_small_graph(self, small_test_graph):
-# 		start_node = 1
-# 		end_node = 4
+class TestDFS:
+	def test_small_min_elevation(self, small_test_graph):
+		start_node = 3
+		end_node = 4
 
-# 		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
-# 		dfs_path = routing.dfs(small_test_graph, start_node, end_node)
+		x = 50
 
-# 		print("shortest path", shortest_path)
-# 		print("dfs path", dfs_path)
+		elevation_setting = "minimize"
 
-# 		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
-# 		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
 
-# 		print("shortest length", shortest_length)
-# 		print("dfs length", dfs_length)
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
 
-# 		assert shortest_length == dfs_length
+		max_length = routing.find_max_length(small_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
 
-# 	def test_medium_graph(self, medium_test_graph):
-# 		start_node = 0
-# 		end_node = 2
+		assert dfs_path_elevation < shortest_path_elevation
+		assert dfs_length <= max_length
+	
+	def test_small_min_elevation_no_variance(self, small_test_graph):
+		start_node = 3
+		end_node = 4
 
-# 		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
-# 		dfs_path = routing.dfs(medium_test_graph, start_node, end_node)
+		x = 0 
 
-# 		print("shortest path", shortest_path)
-# 		print("dfs path", dfs_path)
+		elevation_setting = "minimize"
 
-# 		shortest_length = routing.get_total_path_length(shortest_path, medium_test_graph)
-# 		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
 
-# 		print("shortest length", shortest_length)
-# 		print("dfs length", dfs_length)
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
 
-# 		assert shortest_length == dfs_length
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
 
-# 	def test_small_no_path(self, small_test_nonuniform_graph):
-# 		start_node = 1
-# 		end_node = 2
+		assert shortest_length == dfs_length
+		assert shortest_path_elevation == dfs_path_elevation
+
+	def test_small_min_elevation_no_other_path(self, small_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
+		start_node = 0
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert shortest_length == dfs_length
+		assert shortest_path_elevation == dfs_path_elevation
+	
+	def test_medium_min_elevation(self, medium_test_graph):
+		start_node = 0
+		end_node = 2
+
+		x = 50
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, medium_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, medium_test_graph)
+
+		max_length = routing.find_max_length(medium_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+
+		assert dfs_path_elevation < shortest_path_elevation
+		assert dfs_length <= max_length
+
+	def test_small_max_elevation(self, small_test_graph):
+		start_node = 1
+		end_node = 4
+
+		x = 400 #for testing purposes, find a path that is at max 400% longer than the shortest path
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
+
+		max_length = routing.find_max_length(small_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert dfs_path_elevation > shortest_path_elevation
+		assert dfs_length <= max_length
+
+	def test_medium_max_elevation(self, medium_test_graph):
+		start_node = 0
+		end_node = 2
+
+		x = 75
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, medium_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, medium_test_graph)
+
+		max_length = routing.find_max_length(medium_test_graph, x, start_node, end_node)
+		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+
+		assert dfs_path_elevation > shortest_path_elevation
+		assert dfs_length <= max_length
+
+	def test_small_shortest_path(self, small_test_graph):
+		start_node = 1
+		end_node = 4
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert shortest_length == dfs_length
+		assert shortest_path == dfs_path
+
+	def test_medium_shortest_path(small, medium_test_graph):
+		start_node = 0
+		end_node = 2
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(medium_test_graph, start_node, end_node)
+
+		shortest_length = routing.get_total_path_length(shortest_path, medium_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, medium_test_graph)
+
+		assert shortest_length == dfs_length
+		assert shortest_path == dfs_path
+
+	def test_small_no_path(self, small_test_nonuniform_graph):
+		start_node = 1
+		end_node = 2
+		shortest_path = osmnx.distance.shortest_path(small_test_nonuniform_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_nonuniform_graph, start_node, end_node)
 		
-# 		shortest_path = osmnx.distance.shortest_path(small_test_nonuniform_graph, start_node, end_node)
-# 		dfs_path = routing.dfs(small_test_nonuniform_graph, start_node, end_node)
-		
-# 		assert shortest_path == None
-# 		assert dfs_path == None
+		assert shortest_path == None
+		assert dfs_path == None
+	
+
+	
 	
 
 #FOR TESTING PURPOSES
