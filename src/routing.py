@@ -201,7 +201,6 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	"""
 
 	print("length of graph.nodes: ",(len(graph.nodes()) ))
-	# print("graph: ",graph)
 	print("start node: ", start)
 	print("end node: ", end)
 	visited = {}
@@ -220,9 +219,8 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	print("shortest path osm", shortest_path_osm)
 	print("path len: ", get_total_path_length(shortest_path_osm,graph))
 	all_paths = []
+
 	def dfs_get_all_paths(graph, current, visited, path, depth):
-		# visited[start] = 1
-		# print("current", current)
 		if current == end:
 			if get_total_path_length(path, graph) <= max_length:
 				print("path: ", path)
@@ -251,6 +249,7 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	dfs_get_all_paths(graph,start,visited,path, 50)
 	print("all paths: ", all_paths)
 
+	# finds the maximum/minimum/shortest path
 	elevation = []
 	shortest = sys.maxsize
 	shortest_path = 0
@@ -278,58 +277,6 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 
 		
 		
-
-		
-		
-
-		
-
-	
-	# print("dfs shortest path: ", shortest_path)
-
-
-
-	# 
-
-
-
-	# def dfsGetAllPaths(graph,start,end,visited,path):
-	# 	visited[start] = 1
-
-	# 	if start == end:
-	# 		print("path length: ", get_total_path_length(path,graph))
-	# 		if get_total_path_length(path,graph) <= max_length:
-
-	# 			print("path: ", path)
-	# 			all_Paths.append(path[:])
-	# 			return
-		
-	# for edge in graph.edges(start, data=True):
-	# 	next_node = edge[1]
-	# 	if visited[nextNode] == 0:
-	# 		# print("next node: ", nextNode)
-	# 		path.append(nextNode)
-	# 		dfsGetAllPaths(graph,nextNode,end,visited,path)
-	# 		path.remove(nextNode)
-
-	# 	for edge in graph.edges(start, data=True):
-	# 		next_Node = edge[1]
-	# 		if visited[next_Node] == 0:
-	# 			# print("next node: ", next_Node)
-	# 			path.append(next_Node)
-	# 			dfsGetAllPaths(graph,next_Node,end,visited,path)
-	# 			path.remove(next_Node)
-		
-	# 	visited[start] = 0
-
-	# path.append(start)
-	# dfsGetAllPaths(graph,start,end,visited,path)
-	# print("all paths: ", all_Paths)
-
-	
-	
-	# return shortest_path
-	
 
 def dfs_old(graph, start, end):
     """

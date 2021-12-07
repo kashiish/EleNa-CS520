@@ -353,6 +353,47 @@ class TestDFS:
 		assert dfs_path_elevation < shortest_path_elevation
 		assert dfs_length <= max_length
 	
+	def test_small_min_elevation_no_variance(self, small_test_graph):
+		start_node = 3
+		end_node = 4
+
+		x = 0 
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert shortest_length == dfs_length
+		assert shortest_path_elevation == dfs_path_elevation
+
+	def test_small_min_elevation_no_other_path(self, small_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
+		start_node = 0
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(small_test_graph, start_node, end_node)
+		dfs_path = routing.dfs(small_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing.get_path_elevation(shortest_path, small_test_graph)
+		dfs_path_elevation = routing.get_path_elevation(dfs_path, small_test_graph)
+
+		shortest_length = routing.get_total_path_length(shortest_path, small_test_graph)
+		dfs_length = routing.get_total_path_length(dfs_path, small_test_graph)
+
+		assert shortest_length == dfs_length
+		assert shortest_path_elevation == dfs_path_elevation
+	
 	def test_medium_min_elevation(self, medium_test_graph):
 		start_node = 0
 		end_node = 2
@@ -448,6 +489,8 @@ class TestDFS:
 		assert shortest_path == None
 		assert dfs_path == None
 	
+
+	
 	
 
 
@@ -476,4 +519,4 @@ def show_graph(graph_name):
 		nx.draw_networkx_edge_labels(graph, positions, font_size=5)
 		plt.show()
 
-show_graph("test-medium-graph.pkl")
+# show_graph("test-medium-graph.pkl")
