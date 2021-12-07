@@ -152,6 +152,9 @@ def main():
 	app.set_graph()
 	app.set_start_end_nodes()
 	path = app.find_route()
+	if path is None:
+		print("No path found.")
+		return
 	shortest_path = osmnx.distance.shortest_path(app.graph, app.start, app.end)
 	app.display_path(path, shortest_path)
 
