@@ -1,8 +1,8 @@
 import osmnx
-import routing
 import pickle as pkl
 from context import Context
 from routing_actions import RoutingDijkstra, RoutingAStar, RoutingBFS, RoutingDFS
+from routing_helper import RoutingHelper
 import tkinter as tk
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -69,15 +69,6 @@ class App:
 		end_latitude_longitude = osmnx.geocoder.geocode(self.end_address)
 		self.end = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
 
-	def find_route(self):
-		if self.routing_method == "dijkstra":
-			return routing.dijkstra(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
-		elif self.routing_method == "a*":
-			return routing.a_star(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
-		else:
-			print("Invalid routing method selected.")
-			return None
-
 	def strategy_find_route(self):
 		if self.routing_method == "dijkstra":
 			context = Context(RoutingDijkstra())
@@ -117,7 +108,7 @@ class App:
 		label_total_elevation.config(font=('helvetica', 10))
 		canvas1.create_window(300, 500, window=label_total_elevation)
 		
-		label_total_elevation_value = tk.Label(root, text=str(round(routing.get_path_elevation(path, self.graph), 2)) + " m")
+		label_total_elevation_value = tk.Label(root, text=str(round(RoutingHelper().get_path_elevation(path, self.graph), 2)) + " m")
 		label_total_elevation_value.config(font=('helvetica', 10))
 		canvas1.create_window(400, 500, window=label_total_elevation_value)
 		
@@ -125,7 +116,7 @@ class App:
 		label_total_distance.config(font=('helvetica', 10))
 		canvas1.create_window(300, 530, window=label_total_distance)
 		
-		label_total_distance_value = tk.Label(root, text=str(round(routing.get_total_path_length(path, self.graph), 2)) + " m")
+		label_total_distance_value = tk.Label(root, text=str(round(RoutingHelper().get_total_path_length(path, self.graph), 2)) + " m")
 		label_total_distance_value.config(font=('helvetica', 10))
 		canvas1.create_window(400, 530, window=label_total_distance_value)
 
@@ -133,7 +124,7 @@ class App:
 		label_shortest_path_elevation.config(font=('helvetica', 10))
 		canvas1.create_window(300, 560, window=label_shortest_path_elevation)
 		
-		label_shortest_path_elevation_value = tk.Label(root, text=str(round(routing.get_path_elevation(shortest_path, self.graph), 2)) + " m")
+		label_shortest_path_elevation_value = tk.Label(root, text=str(round(RoutingHelper().get_path_elevation(shortest_path, self.graph), 2)) + " m")
 		label_shortest_path_elevation_value.config(font=('helvetica', 10))
 		canvas1.create_window(400, 560, window=label_shortest_path_elevation_value)
 
@@ -141,7 +132,7 @@ class App:
 		label_shortest_distance.config(font=('helvetica', 10))
 		canvas1.create_window(290, 590, window=label_shortest_distance)
 
-		label_shortest_distance_value = tk.Label(root, text=str(round(routing.get_total_path_length(shortest_path, self.graph), 2)) + " m")
+		label_shortest_distance_value = tk.Label(root, text=str(round(RoutingHelper().get_total_path_length(shortest_path, self.graph), 2)) + " m")
 		label_shortest_distance_value.config(font=('helvetica', 10))
 		canvas1.create_window(400, 590, window=label_shortest_distance_value)
 
