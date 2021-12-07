@@ -199,10 +199,6 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 
 		return: list - a route from start to end or None if a route does not exist
 	"""
-
-	print("length of graph.nodes: ",(len(graph.nodes()) ))
-	print("start node: ", start)
-	print("end node: ", end)
 	visited = {}
 	for node in graph.nodes:
 		visited[node] = 0
@@ -212,18 +208,13 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	max_length = find_max_length(graph, x, start, end)
 	if max_length == -1:
 		return None
-	print("max length: ", max_length)
-
-	shortest_path_osm = osmnx.distance.shortest_path(graph, start, end)
 	
-	print("shortest path osm", shortest_path_osm)
-	print("path len: ", get_total_path_length(shortest_path_osm,graph))
+	
 	all_paths = []
 
 	def dfs_get_all_paths(graph, current, visited, path, depth):
 		if current == end:
 			if get_total_path_length(path, graph) <= max_length:
-				print("path: ", path)
 				all_paths.append(path[:])
 			return
 
@@ -236,7 +227,6 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 			next_node = edge[1]
 			
 			if visited[next_node] == 0:
-				# print("next node: ", next_node)
 				visited[next_node] = 1
 				path.append(next_node)
 				dfs_get_all_paths(graph, next_node, visited, path, depth - 1)
@@ -246,14 +236,16 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	
 	path.append(start)
 	visited[start] = 1
-	dfs_get_all_paths(graph,start,visited,path, 50)
-	print("all paths: ", all_paths)
+	depth = 50
+	dfs_get_all_paths(graph,start,visited,path, depth)
 
 	# finds the maximum/minimum/shortest path
 	elevation = []
 	shortest = sys.maxsize
 	shortest_path = 0
 
+	# find the shortest path by finding the path length of each path in all paths
+	# find the elevation of each path and add it to elevation list
 	for p in all_paths:
 		elevation.append((p,get_path_elevation(p, graph)))
 		path_len = get_total_path_length(p,graph)
@@ -262,7 +254,10 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 			shortest_path = p
 	
 	finalPath = []
+
+	# sort elevation list based on elevation 
 	elevation.sort(key=lambda x: x[1])
+
 
 	if elevation_setting == "maximize":
 		max_elevation = elevation[-1][0]
