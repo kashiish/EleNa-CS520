@@ -1,6 +1,7 @@
 import osmnx
 import heapq
 import sys
+
 sys.path.insert(0, '.')
 from src.routing_mode import RoutingMode
 from src.routing_helper import RoutingHelper
