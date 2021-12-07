@@ -219,7 +219,6 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 			return
 
 		if depth == 0:
-			# print("depth limit reached")
 			return
 
 		for edge in graph.edges(current, data=True):
