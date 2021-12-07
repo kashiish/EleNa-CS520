@@ -208,8 +208,6 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	max_length = find_max_length(graph, x, start, end)
 	if max_length == -1:
 		return None
-	
-	
 	all_paths = []
 
 	def dfs_get_all_paths(graph, current, visited, path, depth):
@@ -257,7 +255,7 @@ def dfs(graph, start, end, x=0, elevation_setting=None):
 	# sort elevation list based on elevation 
 	elevation.sort(key=lambda x: x[1])
 
-
+	# finds final path based on elevation setting
 	if elevation_setting == "maximize":
 		max_elevation = elevation[-1][0]
 		finalPath = max_elevation
