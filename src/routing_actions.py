@@ -178,8 +178,9 @@ class RoutingDFS(RoutingMode):
 
 	def routing_action(self, graph, start, end, x=0, elevation_setting=None):
 		"""
-			Runs DFS path algorithm from start to end location to find all paths from start to end
-			and then only looking at paths that are <= max length 
+		Runs DFS path algorithm from start to end location and finds the path that has a length <= max length 
+		and then finds a route that either maximizes or minimizes elevation gain from start to end location 
+		If elevation_setting is None, it finds the shortest path from start to end.
 
 			params:
 				graph: networkx multidigraph - the area we are searching in
