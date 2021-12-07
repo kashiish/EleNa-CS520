@@ -136,7 +136,7 @@ class App:
 		label_shortest_distance_value.config(font=('helvetica', 10))
 		canvas1.create_window(400, 590, window=label_shortest_distance_value)
 
-		osmnx.plot.plot_graph_routes(self.graph, [path, shortest_path], route_colors=["r", "b"])
+		osmnx.plot.plot_graph_routes(self.graph, [path, shortest_path], route_colors=["r", "b"], route_linewidths=[4, 2], route_alpha=0.8)
 
 		root.mainloop()
 
