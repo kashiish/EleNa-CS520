@@ -1,6 +1,8 @@
 import osmnx
 import routing
 import pickle as pkl
+from context import Context
+from routing_actions import RoutingDijkstra, RoutingAStar, RoutingBFS, RoutingDFS
 import tkinter as tk
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -76,6 +78,23 @@ class App:
 			print("Invalid routing method selected.")
 			return None
 
+	def strategy_find_route(self):
+		if self.routing_method == "dijkstra":
+			context = Context(RoutingDijkstra())
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method == "a*":
+			context = Context(RoutingAStar())
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method == "bfs":
+			context = Context(RoutingBFS())
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		elif self.routing_method  == "dfs":
+			context = Context(RoutingDFS())
+			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
+		else:
+			print("Invalid routing method selected.")
+			return None
+    
 	def display_path(self, path, shortest_path):
 		root = tk.Tk()
 
@@ -151,7 +170,7 @@ def main():
 	app.set_user_inputs()
 	app.set_graph()
 	app.set_start_end_nodes()
-	path = app.find_route()
+	path = app.strategy_find_route()
 	if path is None:
 		print("No path found.")
 		return
