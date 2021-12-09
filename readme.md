@@ -16,7 +16,6 @@ The GUI interface allows the user to view the path returned by the chosen algori
 **Note: Tkinter may need to be installed manually according to your operating system** 
 
 # How to Run
-## Backend
 To use EleNa on your system, run `pip3 install -r requirements.txt` in the root directory of EleNa. This will get you all the needed Python dependencies for you to run the project locally. 
 
 Then, simply run `python3 src/app.py` in the root directory. Now, you will be prompted to enter details of yours desired travel, such as start and end addresses, preferred routing algorithm, mode of transporation, etc. 
