@@ -24,7 +24,10 @@ Note: The current version of EleNa uses Boulder, Colorado's map so only addresse
 ## Python GUI
 The GUI interface allows the user to view the graph of the chosen algorithm's path and the corresponding information such as elevation, distance returned from the path, and the shortest path possible. The GUI utilizes `matplotlib`  to visualize the graph and `tkinter` as well as `osmnx` to display and calculate the corresponding data.
 
-**Note: Tkinter may need to be installed manually according to your operating system**  
+**Note: Tkinter may need to be installed manually according to your operating system** 
+
+## API's Used
+We get our graph data by calling the `OpenStreetMap(OSM)` API. This gives a `networkx` multidigraph that is then used by our routing algorithms. To retrieve the elevation data for each node of the graph, we use the `Open-Elevation` API. We also use the OSM API to get the shortest path for a start and end location. We compare and test our paths against this for accuracy.
 
 # How to Validate
 We have written a series of tests for the Dijkstra and A* algorithms. To run the tests, run `pytest` in the root directory. 
