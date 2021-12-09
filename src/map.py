@@ -26,6 +26,8 @@ def download_map(place_query):
 def add_elevation_data(graph):
 	"""
 	Adds elevation data for each node in `graph` using the Open Elevation API. 
+
+	Inspired by OSMNX's add_node_elevations_google API: https://github.com/gboeing/osmnx/blob/6f9236f20a81416bf34186a811a8ebb76afa0dc8/osmnx/elevation.py#L111
 	
 	params:
 		graph: networkx.MultiDiGraph where each node contains latitude and longitude data
@@ -40,6 +42,7 @@ def add_elevation_data(graph):
 
 	api = "https://api.open-elevation.com/api/v1/lookup"
 	elevation_results = []
+	#call open elevation api for a batch of nodes
 	for i in range(0, len(nodes_data), max_batch_size):
 		locations = []
 		node_ids = []

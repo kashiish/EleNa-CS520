@@ -6,6 +6,7 @@ from routing_helper import RoutingHelper
 import tkinter as tk
 import networkx as nx
 import matplotlib.pyplot as plt
+import time
 
 class App:
 	def __init__(self):
@@ -15,7 +16,7 @@ class App:
 		self.x = None
 		self.transportation_mode = None
 		self.graph = None
-		self.ROUTING_METHODS = ["dijkstra", "a*"]
+		self.ROUTING_METHODS = ["dijkstra", "a*", "dfs"]
 		self.TRANSPORTATION_MODES = ["drive", "walk", "bike"]
 		self.ELEVATION_MODES = ["maximize", "minimize", ""]
 		self.ROUTING_METHODS = ["dijkstra", "a*"]
@@ -36,7 +37,7 @@ class App:
 
 		self.routing_method = ""
 		while self.routing_method not in self.ROUTING_METHODS:
-			self.routing_method = input("Enter the routing algorithm you would like to use (Dijkstra, A*): ").lower()
+			self.routing_method = input("Enter the routing algorithm you would like to use (Dijkstra, A*, DFS): ").lower()
 
 		self.elevation_gain_mode = input("Type 'maximize' if you want to maximize elevation gain, or 'minimize' if you want to minimize elevation gain (no quotes), or press enter to skip & to get the shortest route: ")
 		while self.elevation_gain_mode not in self.ELEVATION_MODES:
