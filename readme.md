@@ -7,9 +7,13 @@ The high-level goal of this project is to develop a software system that determi
 end location, a route that maximizes or minimizes elevation gain, while limiting the total distance between
 the two locations to x% of the shortest path.
 
-## APIs
+## APIs 
+We get our graph data using the [`OpenStreetMap(OSM)`](https://osmnx.readthedocs.io/en/stable/osmnx.html) API which returns a `networkx` multidigraph of the city. Since OSM does not provide elevation data, we use [`Open-Elevation`](https://open-elevation.com/) API to retrieve the elevation data for each node of the graph. We also use the OSM API to get the default shortest path between a start and end location. We compare and test our paths against this path for accuracy.
 
-TODO
+## Python GUI
+The GUI interface allows the user to view the path returned by the chosen algorithm and the corresponding information such as total elevation and total distance of the path compared with the shortest path possible. The GUI utilizes the OSM API to visualize the path in the city's graph and `tkinter` to display the corresponding data.
+
+**Note: Tkinter may need to be installed manually according to your operating system** 
 
 # How to Run
 ## Backend
@@ -20,14 +24,6 @@ Then, simply run `python3 src/app.py` in the root directory. Now, you will be pr
 Note: The current version of EleNa uses Boulder, Colorado's map so only addresses in Boulder will work. We are using a cached version of the Boulder map that was downloaded on 11/8/2021. If you would like to download an updated copy of the map or use the map of a different city please run:
 
 `python src/map.py <city> <state> <country>`  from the root directory.
-
-## Python GUI
-The GUI interface allows the user to view the graph of the chosen algorithm's path and the corresponding information such as elevation, distance returned from the path, and the shortest path possible. The GUI utilizes `matplotlib`  to visualize the graph and `tkinter` as well as `osmnx` to display and calculate the corresponding data.
-
-**Note: Tkinter may need to be installed manually according to your operating system** 
-
-## API's Used
-We get our graph data by calling the `OpenStreetMap(OSM)` API. This gives a `networkx` multidigraph that is then used by our routing algorithms. To retrieve the elevation data for each node of the graph, we use the `Open-Elevation` API. We also use the OSM API to get the shortest path for a start and end location. We compare and test our paths against this for accuracy.
 
 # How to Validate
 We have written a series of tests for the Dijkstra and A* algorithms. To run the tests, run `pytest` in the root directory. 
