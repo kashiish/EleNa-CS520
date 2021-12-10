@@ -349,6 +349,18 @@ class TestDijkstra:
 		assert shortest_path == None
 		assert dijkstra_path == None
 
+
+	def test_small_same_start_end(self, dijkstra, small_test_graph):
+		start_node = 1
+		end_node = 1
+
+		dijkstra_path = dijkstra.execute_routing_mode(small_test_graph, start_node, end_node)
+
+		dijkstra_length = routing_helper.RoutingHelper().get_total_path_length(dijkstra_path, small_test_graph)
+
+		assert dijkstra_path == [1]
+		assert dijkstra_length == 0
+
 class TestAStar:
 	def test_small_min_elevation(self, astar, small_test_graph):
 		start_node = 3
@@ -629,6 +641,17 @@ class TestAStar:
 		assert shortest_path == None
 		assert a_star_path == None
 
+	def test_small_same_start_end(self, astar, small_test_graph):
+		start_node = 1
+		end_node = 1
+
+		a_star_path = astar.execute_routing_mode(small_test_graph, start_node, end_node)
+
+		a_star_length = routing_helper.RoutingHelper().get_total_path_length(a_star_path, small_test_graph)
+
+		assert a_star_path == [1]
+		assert a_star_length == 0
+
 class TestDFS:
 	def test_small_min_elevation(self, dfs, small_test_graph):
 		start_node = 3
@@ -908,6 +931,17 @@ class TestDFS:
 		
 		assert shortest_path == None
 		assert dfs_path == None	
+
+	def test_small_same_start_end(self, dfs, small_test_graph):
+		start_node = 1
+		end_node = 1
+
+		dfs_path = dfs.execute_routing_mode(small_test_graph, start_node, end_node)
+
+		dfs_length = routing_helper.RoutingHelper().get_total_path_length(dfs_path, small_test_graph)
+
+		assert dfs_path == [1]
+		assert dfs_length == 0
 
 #FOR TESTING PURPOSES
 def show_graph(graph_name):
