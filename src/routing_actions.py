@@ -109,8 +109,8 @@ class RoutingAStar(RoutingMode):
 		return: list - a route from start to end or None if a route does not exist
 		"""
 
-		g_elevations = {} #for each node, stores elevation from current node to next node
-		f_elevations = {} #for each node, stores elevation from current node to next node + elevation from current node to end node
+		g_elevations = {} #for each node, stores elevation from start node to next node
+		f_elevations = {} #for each node, stores elevation from start node to next node + elevation from current node to end node
 		distances = {} #
 		previous_nodes = {}
 
