@@ -19,7 +19,6 @@ class App:
 		self.ROUTING_METHODS = ["dijkstra", "a*", "dfs"]
 		self.TRANSPORTATION_MODES = ["drive", "walk", "bike"]
 		self.ELEVATION_MODES = ["maximize", "minimize", ""]
-		self.ROUTING_METHODS = ["dijkstra", "a*"]
 		self.start = None
 		self.end = None
 		self.routing_method = None
