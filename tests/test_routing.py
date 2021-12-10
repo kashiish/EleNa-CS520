@@ -153,8 +153,8 @@ class TestDijkstra:
 		assert dijkstra_length <= max_length
 
 	def test_medium_min_elevation_no_variance(self, dijkstra, medium_test_graph):
-		start_node = 3
-		end_node = 4
+		start_node = 0
+		end_node = 2
 
 		x = 0 
 
@@ -275,8 +275,8 @@ class TestDijkstra:
 		assert dijkstra_length <= max_length
 
 	def test_medium_max_elevation_no_variance(self, dijkstra, medium_test_graph):
-		start_node = 1
-		end_node = 4
+		start_node = 3
+		end_node = 7
 
 		x = 0 
 
@@ -431,6 +431,47 @@ class TestAStar:
 		assert a_star_path_elevation < shortest_path_elevation
 		assert a_star_length <= max_length
 
+	def test_medium_min_elevation_no_variance(self, astar, medium_test_graph):
+		start_node = 0
+		end_node = 2
+
+		x = 0 
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		a_star_path = astar.execute_routing_mode(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing_helper.RoutingHelper().get_path_elevation(shortest_path, medium_test_graph)
+		a_star_path_elevation = routing_helper.RoutingHelper().get_path_elevation(a_star_path, medium_test_graph)
+
+		shortest_length = routing_helper.RoutingHelper().get_total_path_length(shortest_path, medium_test_graph)
+		a_star_length = routing_helper.RoutingHelper().get_total_path_length(a_star_path, medium_test_graph)
+
+		assert shortest_length == a_star_length
+		assert shortest_path_elevation == a_star_path_elevation
+
+	def test_medium_min_elevation_no_other_path(self, astar, medium_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
+		start_node = 11
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "minimize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		a_star_path = astar.execute_routing_mode(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing_helper.RoutingHelper().get_path_elevation(shortest_path, medium_test_graph)
+		a_star_path_elevation = routing_helper.RoutingHelper().get_path_elevation(a_star_path, medium_test_graph)
+
+		shortest_length = routing_helper.RoutingHelper().get_total_path_length(shortest_path, medium_test_graph)
+		a_star_length = routing_helper.RoutingHelper().get_total_path_length(a_star_path, medium_test_graph)
+
+		assert shortest_length == a_star_length
+		assert shortest_path_elevation == a_star_path_elevation
+
 	def test_small_max_elevation(self, astar, small_test_graph):
 		start_node = 1
 		end_node = 4
@@ -508,6 +549,45 @@ class TestAStar:
 
 		assert a_star_path_elevation > shortest_path_elevation
 		assert a_star_length <= max_length
+
+	def test_medium_max_elevation_no_variance(self, astar, medium_test_graph):
+		start_node = 3
+		end_node = 7
+
+		x = 0 
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		a_star_path = astar.execute_routing_mode(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing_helper.RoutingHelper().get_path_elevation(shortest_path, medium_test_graph)
+		a_star_path_elevation = routing_helper.RoutingHelper().get_path_elevation(a_star_path, medium_test_graph)
+
+		shortest_length = routing_helper.RoutingHelper().get_total_path_length(shortest_path, medium_test_graph)
+		a_star_length = routing_helper.RoutingHelper().get_total_path_length(a_star_path, medium_test_graph)
+
+		assert shortest_length == a_star_length
+		assert shortest_path_elevation == a_star_path_elevation
+
+	def test_medium_max_elevation_no_other_path(self, astar, medium_test_graph):
+		#this test should return the shortest path because there is no other path besides 0 -> 4
+		start_node = 11
+		end_node = 4
+
+		x = 50
+
+		elevation_setting = "maximize"
+
+		shortest_path = osmnx.distance.shortest_path(medium_test_graph, start_node, end_node)
+		a_star_path = astar.execute_routing_mode(medium_test_graph, start_node, end_node, x, elevation_setting)
+
+		shortest_path_elevation = routing_helper.RoutingHelper().get_path_elevation(shortest_path, medium_test_graph)
+		a_star_path_elevation = routing_helper.RoutingHelper().get_path_elevation(a_star_path, medium_test_graph)
+
+		shortest_length = routing_helper.RoutingHelper().get_total_path_length(shortest_path, medium_test_graph)
+		a_star_length = routing_helper.RoutingHelper().get_total_path_length(a_star_path, medium_test_graph)
+
 
 	def test_small_shortest_path(self, astar, small_test_graph):
 		start_node = 1
