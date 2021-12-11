@@ -7,9 +7,9 @@ import math
 # The following code has been inspired from the networkx documentation: https://networkx.org/documentation/stable/auto_examples/drawing/plot_directed.html
 def make_small_uniform_graph():
 	random.seed(15)
-	graph = nx.generators.directed.random_uniform_k_out_graph(5, 3, seed=5)
+	graph = nx.generators.directed.random_k_out_graph(5, 3, 1, seed=5)
 	positions = nx.layout.spring_layout(graph, seed=15) 
-	marked = {}
+
 	for node in graph.nodes:
 		graph.nodes[node]["x"] = positions[node][0] * 10
 		graph.nodes[node]["y"] = positions[node][1] * 10
@@ -21,9 +21,6 @@ def make_small_uniform_graph():
 		second_node = graph.nodes[path[1]]
 		graph.edges[path[0], path[1], 0]["length"] = int(math.dist([first_node["x"], first_node["y"]], [second_node["x"], second_node["y"]]))
 		graph.edges[path[0], path[1], 0]["elevation_diff"] = int(second_node["elevation"] - first_node["elevation"])
-
-	for node in graph.nodes:
-			marked[node] = node
 
 	filename = "cached_maps/test-small-uniform-graph.pkl"
 	pkl.dump(graph, open(filename, "wb"))
@@ -32,7 +29,7 @@ def make_small_nonuniform_graph():
 	random.seed(15)
 	graph = nx.generators.directed.random_k_out_graph(5, 3, 0.3, self_loops=False, seed=5)
 	positions = nx.layout.spring_layout(graph, seed=15) 
-	marked = {}
+
 	for node in graph.nodes:
 		graph.nodes[node]["x"] = positions[node][0] * 10
 		graph.nodes[node]["y"] = positions[node][1] * 10
@@ -45,17 +42,13 @@ def make_small_nonuniform_graph():
 		graph.edges[path[0], path[1], 0]["length"] = int(math.dist([first_node["x"], first_node["y"]], [second_node["x"], second_node["y"]]))
 		graph.edges[path[0], path[1], 0]["elevation_diff"] = int(second_node["elevation"] - first_node["elevation"])
 
-	for node in graph.nodes:
-			marked[node] = node
-
 	filename = "cached_maps/test-small-nonuniform-graph.pkl"
 	pkl.dump(graph, open(filename, "wb"))
 
 def make_medium_graph():
 	random.seed(15)
-	graph = nx.generators.directed.random_uniform_k_out_graph(15, 5, seed=5)
+	graph = nx.generators.directed.random_k_out_graph(15, 5, 1, seed=5)
 	positions = nx.layout.spring_layout(graph, seed=15) 
-	marked = {}
 
 	for node in graph.nodes:
 		graph.nodes[node]["x"] = positions[node][0] * 10
@@ -68,9 +61,6 @@ def make_medium_graph():
 		second_node = graph.nodes[path[1]]
 		graph.edges[path[0], path[1], 0]["length"] = int(math.dist([first_node["x"], first_node["y"]], [second_node["x"], second_node["y"]]))
 		graph.edges[path[0], path[1], 0]["elevation_diff"] = int(second_node["elevation"] - first_node["elevation"])
-
-	for node in graph.nodes:
-		marked[node] = node
 
 	filename = "cached_maps/test-medium-graph.pkl"
 	pkl.dump(graph, open(filename, "wb"))
