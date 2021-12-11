@@ -22,7 +22,7 @@ def make_small_uniform_graph():
 		graph.edges[path[0], path[1], 0]["length"] = int(math.dist([first_node["x"], first_node["y"]], [second_node["x"], second_node["y"]]))
 		graph.edges[path[0], path[1], 0]["elevation_diff"] = int(second_node["elevation"] - first_node["elevation"])
 
-	filename = "cached_maps/test-small-uniform-graph.pkl"
+	filename = "cached_maps/test-small-uniform-graph1.pkl"
 	pkl.dump(graph, open(filename, "wb"))
 
 def make_small_nonuniform_graph():
@@ -67,26 +67,26 @@ def make_medium_graph():
 
 
 def remove_duplicate_edges_for_node(graph, node):
-	duplicates = []
+	duplicates = set()
 	incoming = {}
 	outgoing = {}
 	for path in graph.in_edges(node):
 		if path not in incoming:
 			incoming[path] = True
 		else:
-			duplicates.append(path)
+			duplicates.add(path)
 
 	for path in graph.out_edges(node):
 		if path not in outgoing:
 			outgoing[path] = True
 		else:
-			duplicates.append(path)
+			duplicates.add(path)
 
 	for path in duplicates:
 		graph.remove_edge(path[0], path[1])
 
 
 # if __name__ == "__main__":
-		# make_small_uniform_graph()
+# 		make_small_uniform_graph()
 		# make_small_nonuniform_graph()
 		# make_medium_graph()
