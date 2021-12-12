@@ -76,9 +76,6 @@ class App:
 		elif self.routing_method == "a*":
 			context = Context(RoutingAStar())
 			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
-		elif self.routing_method == "bfs":
-			context = Context(RoutingBFS())
-			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
 		elif self.routing_method  == "dfs":
 			context = Context(RoutingDFS())
 			return context.execute_routing_mode(self.graph, self.start, self.end, self.x, self.elevation_gain_mode)
