@@ -63,11 +63,17 @@ class App:
 				self.graph = pkl.load(file)
 		
 	def set_start_end_nodes(self):
-		start_latitude_longitude = osmnx.geocoder.geocode(self.start_address)
-		self.start = osmnx.distance.nearest_nodes(self.graph, start_latitude_longitude[1], start_latitude_longitude[0])
+		try:
+
+			start_latitude_longitude = osmnx.geocoder.geocode(self.start_address)
+			self.start = osmnx.distance.nearest_nodes(self.graph, start_latitude_longitude[1], start_latitude_longitude[0])
+			
+			end_latitude_longitude = osmnx.geocoder.geocode(self.end_address)
+			self.end = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
 		
-		end_latitude_longitude = osmnx.geocoder.geocode(self.end_address)
-		self.end = osmnx.distance.nearest_nodes(self.graph, end_latitude_longitude[1], end_latitude_longitude[0])
+		except ValueError:
+			print("Error: Invalid addresses given. Please enter a valid address for start and end locations.")
+			exit()
 
 	def strategy_find_route(self):
 		if self.routing_method == "dijkstra":
